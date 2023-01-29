@@ -35,6 +35,23 @@ void Widget::paintEvent(QPaintEvent *event){
     update();
 }
 
+void Widget::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_W :
+            operat(1);
+            break;
+        case Qt::Key_S :
+            operat(2);
+            break;
+        case Qt::Key_A :
+            operat(3);
+            break;
+        case Qt::Key_D :
+            operat(4);
+            break;
+    }
+}
+
 void Widget::lastLevel() {
     if (LEVEL == 1) return;//防止第一关点"上一关"
     LEVEL--;
@@ -61,23 +78,6 @@ void Widget::draw_block() {
         for (int j = 0; j < COL; j++) {
             paint.drawEllipse(locate_x[i][j], locate_y[i][j], B_wide, B_wide);//临时画圆占位用于测试
         }
-    }
-}
-
-void Widget::keyPressEvent(QKeyEvent *event) {
-    switch(event->key()) {
-        case Qt::Key_W :
-            operat(1);
-            break;
-        case Qt::Key_S :
-            operat(2);
-            break;
-        case Qt::Key_A :
-            operat(3);
-            break;
-        case Qt::Key_D :
-            operat(4);
-            break;
     }
 }
 
