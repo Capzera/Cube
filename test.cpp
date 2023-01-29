@@ -1,0 +1,5 @@
+
+void add()
+{
+    int a;
+}
