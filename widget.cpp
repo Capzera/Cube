@@ -3,7 +3,7 @@
 Widget::Widget(QWidget *parent): QWidget(parent) {
     int a, b;
     cin >> a >> b;
-    cout << a * b << endl;
+    cout << a + b * b<< endl;
 }
 
 Widget::~Widget() {}
