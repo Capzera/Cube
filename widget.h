@@ -19,7 +19,7 @@ class Widget : public QWidget {
 public slots:
     void nextLevel();//下一关按钮槽
     void lastLevel();//上一关按钮槽
-    //void Reset();//重开
+    void Reset();//重开
     //void Start();//暂定没用
 public:
     Widget(QWidget *parent = 0);

@@ -21,6 +21,7 @@ void Widget::Init() {
     btn3->setGeometry(895, 195, 160, 40);//设置控件几何坐标
     connect(btn1, SIGNAL(clicked(bool)), this, SLOT(lastLevel()));//槽函数建立
     connect(btn2, SIGNAL(clicked(bool)), this, SLOT(nextLevel()));
+    connect(btn3, SIGNAL(clicked(bool)), this, SLOT(Reset()));
 }
 
 void Widget::keyPressEvent(QKeyEvent *event) {
@@ -51,6 +52,10 @@ void Widget::nextLevel() {
     if (LEVEL == MAX_LEVEL) return;//防止最后一关点"下一关"
     LEVEL++;
     le1->setText("第" + QString::number(LEVEL) + "关");
+    M->getLevel(LEVEL);
+}
+
+void Widget::Reset() {
     M->getLevel(LEVEL);
 }
 
