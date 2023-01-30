@@ -37,15 +37,17 @@ void MAP::blockPosInit(int level)
         QString oneLine(buf);
         QVector<int> bl;
         QString tmp;
-        for(int i=0, j=0; i<oneLine.size(); ++i){
-            if(oneLine[i] == ' '){
-                tmp = oneLine.mid(j, i-j);
+        for(auto& c : oneLine){
+            char x = c.toLatin1();
+            if (x == ' ') {
                 bl.push_back(tmp.toInt());
-                j = i + 1;
+                tmp.clear();
             }
+            else tmp += x;
         }
         bl.push_back(tmp.toInt());
         block_pos[bl[3]][bl[4]].push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4]));
+        bl.clear();
     }
 }
 
