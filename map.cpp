@@ -47,11 +47,13 @@ void MAP::draw_frame() {
 }
 
 void MAP::draw_block() {
-    BLOCK tmp(3,1,1,0,0);
-    BLOCK tmp2(3, 1, 4, 0, 2);
+    BLOCK tmp(0,0,0,0,0);
+    BLOCK tmp2(3,1,1,0,1);
+    BLOCK tmp3(3,1,5,0,2);
     QPainter paint(this);
-    draw_puzzle_block(tmp);
+    draw_player_block(tmp);
     draw_puzzle_block(tmp2);
+    draw_puzzle_block(tmp3);
 }
 
 void MAP::draw_puzzle_block(BLOCK bl) {
@@ -124,4 +126,14 @@ void MAP::draw_puzzle_block(BLOCK bl) {
         if (i == 3) paint.drawLine(QPoint(x, y), QPoint(x, y + length));
         if (i == 4) paint.drawLine(QPoint(x + length, y), QPoint(x + length, y + length));
     }
+}
+
+void MAP::draw_player_block(BLOCK bl) {
+    int radius = B_wide * 2 / 10, split = B_wide * 4 / 10;
+    QPainter paint(this);
+    paint.setPen(QPen(Qt::black, radius, Qt::SolidLine));
+    int pos_x = bl.getPos().x(), pos_y = bl.getPos().y();
+    int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
+    qDebug() << x + split;
+    paint.drawEllipse(x + split, y + split, radius, radius);
 }
