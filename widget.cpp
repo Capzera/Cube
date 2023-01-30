@@ -13,6 +13,7 @@ void Widget::Init() {
     le1 = new QLineEdit("第1关", this);
     le1->setReadOnly(1);
     M = new MAP(this);
+    M->getLevel(LEVEL);
     le1->setAlignment(Qt::AlignHCenter);
     btn1->setGeometry(855, 135, 80, 40);
     le1->setGeometry(940, 137, 70, 35);
@@ -43,12 +44,14 @@ void Widget::lastLevel() {
     if (LEVEL == 1) return;//防止第一关点"上一关"
     LEVEL--;
     le1->setText("第" + QString::number(LEVEL) + "关");
+    M->getLevel(LEVEL);
 }
 
 void Widget::nextLevel() {
     if (LEVEL == MAX_LEVEL) return;//防止最后一关点"下一关"
     LEVEL++;
     le1->setText("第" + QString::number(LEVEL) + "关");
+    M->getLevel(LEVEL);
 }
 
 void Widget::operat(int op) {
