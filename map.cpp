@@ -4,7 +4,6 @@ QVector<QVector<int>> di = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
 MAP::MAP(QWidget *parent) : QWidget(parent) {
     setFixedSize(850, 650);
-    block_pos = QVector<QVector<QVector<BLOCK*>>> (ROW, QVector<QVector<BLOCK*>> (COL, QVector<BLOCK*> (0)));
 }
 
 void MAP::getLevel(int level) {
@@ -25,31 +24,27 @@ void MAP::getLevel(int level) {
     COL = buffer[0].toInt();
     ROW = buffer[1].toInt();
     mapInit();
+    blockPosInit(level);
 }
 
 void MAP::blockPosInit(int level)
 {
-    QDir *folder = new QDir;
-    bool folderCheck = folder->exists("./level");
-    if (!folderCheck) {
-        folder->mkpath("./level");
-    }
-    QString fileName = "./level/level" + QString::number(level) + "-" + QString::number(level) + ".txt";
+    QString fileName = "./level/level" + QString::number(level) + "-1" + ".txt";
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
     while (!file.atEnd()){
         QByteArray buf = file.readLine();
         QString oneLine(buf);
-        //qDebug("%s\n", oneLine);
-        QVector<int> bl(5);
+        QVector<int> bl;
         QString tmp;
-        for(int i=0, j=0, cnt=0; i<oneLine.size(); ++i){
+        for(int i=0, j=0; i<oneLine.size(); ++i){
             if(oneLine[i] == ' '){
                 tmp = oneLine.mid(j, i-j);
-                bl[cnt++] = tmp.toInt();
-                tmp.clear();
+                bl.push_back(tmp.toInt());
+                j = i + 1;
             }
         }
+        bl.push_back(tmp.toInt());
         block_pos[bl[3]][bl[4]].push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4]));
     }
 }
@@ -58,6 +53,7 @@ void MAP::mapInit() {
     PLAYER = new BLOCK(1,0,0,0,0);
     B_wide = 800 / COL;
     locate_x = locate_y = QVector<QVector<int>>(ROW, QVector<int>(COL));
+    block_pos = QVector<QVector<QVector<BLOCK*>>> (ROW, QVector<QVector<BLOCK*>> (COL, QVector<BLOCK*> (0)));
     for (int i = 0; i < ROW; i++) {
         for (int j = 0; j < COL; j++) {
             locate_x[i][j] = B_wide * j + 25;
@@ -81,6 +77,13 @@ void MAP::draw_frame() {
 
 void MAP::draw_block() {
     draw_player_block(PLAYER);
+    for (int i = 0; i < ROW; i++) {
+        for (int j = 0; j < COL; j++) {
+            for (int k = 0; k < block_pos[i][j].size(); k++) {
+                draw_puzzle_block(block_pos[i][j][k]);
+            }
+        }
+    }
 }
 
 void MAP::draw_puzzle_block(BLOCK *bl) {

@@ -30,7 +30,7 @@ public:
     QVector<QVector<int>> locate_x, locate_y, blocks;//像素坐标记录
     int player_x, player_y;
     BLOCK *PLAYER;
-    QVector<QVector<QVector<BLOCK*>>> block_pos;//
+    QVector<QVector<QVector<BLOCK*>>> block_pos;
 };
 
 #endif // MAP_H
