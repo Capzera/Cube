@@ -1,5 +1,7 @@
 #include "map.h"
 
+QVector<QVector<int>> di = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
 MAP::MAP(QWidget *parent) : QWidget(parent) {
     setFixedSize(850, 650);
 }
@@ -24,6 +26,7 @@ void MAP::getLevel(int level) {
 }
 
 void MAP::mapInit() {
+    PLAYER = new BLOCK(1,0,0,0,0);
     B_wide = 800 / COL;
     locate_x = locate_y = QVector<QVector<int>>(ROW, QVector<int>(COL));
     for (int i = 0; i < ROW; i++) {
@@ -47,32 +50,26 @@ void MAP::draw_frame() {
 }
 
 void MAP::draw_block() {
-    BLOCK tmp(0,0,0,0,0);
-    BLOCK tmp2(3,1,1,0,1);
-    BLOCK tmp3(3,1,5,0,2);
-    QPainter paint(this);
-    draw_player_block(tmp);
-    draw_puzzle_block(tmp2);
-    draw_puzzle_block(tmp3);
+    draw_player_block(PLAYER);
 }
 
-void MAP::draw_puzzle_block(BLOCK bl) {
+void MAP::draw_puzzle_block(BLOCK *bl) {
     QPainter paint(this);
-    if (bl.getColor() == BLOCK_COLOR::RED) {
+    if (bl->getColor() == BLOCK_COLOR::RED) {
         paint.setPen(QPen(Qt::red, 3, Qt::SolidLine));
     }
-    if (bl.getColor() == BLOCK_COLOR::BLUE) {
+    if (bl->getColor() == BLOCK_COLOR::BLUE) {
         paint.setPen(QPen(Qt::blue, 3, Qt::SolidLine));
     }
-    if (bl.getColor() == BLOCK_COLOR::YELLOW) {
+    if (bl->getColor() == BLOCK_COLOR::YELLOW) {
         paint.setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
     }
-    if (bl.getColor() == BLOCK_COLOR::GREEN) {
+    if (bl->getColor() == BLOCK_COLOR::GREEN) {
         paint.setPen(QPen(Qt::green, 3, Qt::SolidLine));
     }
     bool big;
     int direct;
-    switch (bl.getBlockState()) {
+    switch (bl->getBlockState()) {
         case BLOCK_STATE::SMALL_UP :
             direct = 1;
             big = 0;
@@ -107,7 +104,7 @@ void MAP::draw_puzzle_block(BLOCK bl) {
         break;
     }
     int length;
-    int pos_x = bl.getPos().x(), pos_y = bl.getPos().y();
+    int pos_x = bl->getPos().x(), pos_y = bl->getPos().y();
     int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
     if (big) {
         length = B_wide * 3 / 4;
@@ -128,12 +125,18 @@ void MAP::draw_puzzle_block(BLOCK bl) {
     }
 }
 
-void MAP::draw_player_block(BLOCK bl) {
+void MAP::draw_player_block(BLOCK *bl) {
     int radius = B_wide * 2 / 10, split = B_wide * 4 / 10;
     QPainter paint(this);
     paint.setPen(QPen(Qt::black, radius, Qt::SolidLine));
-    int pos_x = bl.getPos().x(), pos_y = bl.getPos().y();
+    int pos_x = bl->getPos().x(), pos_y = bl->getPos().y();
     int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
-    qDebug() << x + split;
     paint.drawEllipse(x + split, y + split, radius, radius);
+}
+
+void MAP::operat(int d) {
+    int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
+    int mx = x + di[d][0], my = y + di[d][1];
+    if (mx < 0 || mx == ROW || my < 0 || my == COL) return;
+    PLAYER->move(mx, my);
 }

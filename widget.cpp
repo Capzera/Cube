@@ -26,16 +26,16 @@ void Widget::Init() {
 void Widget::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_W :
-            operat(1);
+            M->operat(1);
             break;
         case Qt::Key_S :
-            operat(2);
+            M->operat(2);
             break;
         case Qt::Key_A :
-            operat(3);
+            M->operat(3);
             break;
         case Qt::Key_D :
-            operat(4);
+            M->operat(4);
             break;
     }
 }
@@ -52,21 +52,6 @@ void Widget::nextLevel() {
     LEVEL++;
     le1->setText("第" + QString::number(LEVEL) + "关");
     M->getLevel(LEVEL);
-}
-
-void Widget::operat(int op) {
-    if (op == 1) {
-        qDebug() << "按下了W";
-    }
-    if (op == 2) {
-        qDebug() << "按下了S";
-    }
-    if (op == 3) {
-        qDebug() << "按下了A";
-    }
-    if (op == 4) {
-        qDebug() << "按下了D";
-    }
 }
 
 Widget::~Widget() {}

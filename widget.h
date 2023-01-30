@@ -25,7 +25,6 @@ public:
     Widget(QWidget *parent = 0);
     //void paintEvent(QPaintEvent *);//画布事件
     void keyPressEvent(QKeyEvent *);//键盘监听事件
-    void operat(int);//玩家移动
     void Init();//初始化函数
     int LEVEL = 1, MAX_LEVEL = 2;//关卡数定义
     QPushButton *btn1, *btn2, *btn3;//按钮类

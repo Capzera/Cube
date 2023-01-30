@@ -33,5 +33,9 @@ BLOCK::BLOCK(int state, int color, int block_state, int x, int y)
     _pos = QPoint(x, y);
 }
 
-BLOCK::~BLOCK()
-{}
+void BLOCK::move(int& x, int& y) {
+    _pos.setX(x);
+    _pos.setY(y);
+}
+
+BLOCK::~BLOCK(){}
