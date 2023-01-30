@@ -48,10 +48,67 @@ void MAP::draw_frame() {
 
 void MAP::draw_block() {
     QPainter paint(this);
-    paint.setPen(QPen(Qt::green, 2, Qt::SolidLine));
-    for (int i = 0; i < ROW; i++) {
-        for (int j = 0; j < COL; j++) {
-            paint.drawEllipse(locate_x[i][j], locate_y[i][j], B_wide, B_wide);
-        }
+}
+
+void MAP::draw_big_block(BLOCK bl) {
+    QPainter paint(this);
+    if (bl.getColor() == BLOCK_COLOR::RED) {
+        paint.setPen(QPen(Qt::red, 2, Qt::SolidLine));
+    }
+    if (bl.getColor() == BLOCK_COLOR::BLUE) {
+        paint.setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+    }
+    if (bl.getColor() == BLOCK_COLOR::YELLOW) {
+        paint.setPen(QPen(Qt::yellow, 2, Qt::SolidLine));
+    }
+    if (bl.getColor() == BLOCK_COLOR::GREEN) {
+        paint.setPen(QPen(Qt::green, 2, Qt::SolidLine));
+    }
+    int length = B_wide * 3 / 4;
+    int direct = 0;
+    switch (bl.getBlockState()) {
+        case : BLOCK_STATE::BIG_UP;
+            direct = 1;
+        break;
+        case : BLOCK_STATE::BIG_DOWN;
+            direct = 2;
+        break;
+        case : BLOCK_STATE::BIG_LEFT;
+            direct = 3;
+        break;
+        case : BLOCK_STATE::BIG_RIGHT;
+            direct = 4;
+        break;
+    }
+}
+
+void MAP::draw_small_block(BLOCK bl) {
+    QPainter paint(this);
+    if (bl.getColor() == BLOCK_COLOR::RED) {
+        paint.setPen(QPen(Qt::red, 2, Qt::SolidLine));
+    }
+    if (bl.getColor() == BLOCK_COLOR::BLUE) {
+        paint.setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+    }
+    if (bl.getColor() == BLOCK_COLOR::YELLOW) {
+        paint.setPen(QPen(Qt::yellow, 2, Qt::SolidLine));
+    }
+    if (bl.getColor() == BLOCK_COLOR::GREEN) {
+        paint.setPen(QPen(Qt::green, 2, Qt::SolidLine));
+    }
+    int length = B_wide / 2;
+    switch (bl.getBlockState()) {
+        case : BLOCK_STATE::SMALL_UP;
+            direct = 1;
+        break;
+        case : BLOCK_STATE::SMALL_DOWN;
+            direct = 2;
+        break;
+        case : BLOCK_STATE::SMALL_LEFT;
+            direct = 3;
+        break;
+        case : BLOCK_STATE::SMALL_RIGHT;
+            direct = 4;
+        break;
     }
 }
