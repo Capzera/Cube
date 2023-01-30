@@ -12,6 +12,7 @@
 #include <QPlainTextEdit>
 #include <QVector>
 #include <QString>
+#include "map.h"
 
 enum BLOCK_STATE {//方块状态
     SMALL_LEFT,//小型方块开口朝左
@@ -47,17 +48,14 @@ public slots:
     //void Start();//暂定没用
 public:
     Widget(QWidget *parent = 0);
-    void paintEvent(QPaintEvent *);//画布事件
+    //void paintEvent(QPaintEvent *);//画布事件
     void keyPressEvent(QKeyEvent *);//键盘监听事件
-    void draw_frame();//画边框
-    void draw_block();//画方块
     void operat(int);//玩家移动
     void Init();//初始化函数
-    int ROW = 15, COL = 20, B_wide = 40;//定义游戏区方格长、宽、像素点矩阵宽度
     int LEVEL = 1, MAX_LEVEL = 99;//关卡数定义
     QPushButton *btn1, *btn2, *btn3;//按钮类
     QLineEdit *le1;//单行文本框
-    QVector<QVector<int>> locate_x, locate_y, blocks;//像素坐标记录
+    MAP *M;
     ~Widget();
 };
 
