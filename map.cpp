@@ -47,24 +47,26 @@ void MAP::draw_frame() {
 }
 
 void MAP::draw_block() {
-    BLOCK tmp(0,0,0,0,0);
+    BLOCK tmp(3,1,1,0,0);
+    BLOCK tmp2(3, 1, 4, 0, 2);
     QPainter paint(this);
     draw_puzzle_block(tmp);
+    draw_puzzle_block(tmp2);
 }
 
 void MAP::draw_puzzle_block(BLOCK bl) {
     QPainter paint(this);
     if (bl.getColor() == BLOCK_COLOR::RED) {
-        paint.setPen(QPen(Qt::red, 2, Qt::SolidLine));
+        paint.setPen(QPen(Qt::red, 3, Qt::SolidLine));
     }
     if (bl.getColor() == BLOCK_COLOR::BLUE) {
-        paint.setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+        paint.setPen(QPen(Qt::blue, 3, Qt::SolidLine));
     }
     if (bl.getColor() == BLOCK_COLOR::YELLOW) {
-        paint.setPen(QPen(Qt::yellow, 2, Qt::SolidLine));
+        paint.setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
     }
     if (bl.getColor() == BLOCK_COLOR::GREEN) {
-        paint.setPen(QPen(Qt::green, 2, Qt::SolidLine));
+        paint.setPen(QPen(Qt::green, 3, Qt::SolidLine));
     }
     bool big;
     int direct;
@@ -103,7 +105,8 @@ void MAP::draw_puzzle_block(BLOCK bl) {
         break;
     }
     int length;
-    int x = bl.getPos().x(), y = bl.getPos().y();
+    int pos_x = bl.getPos().x(), pos_y = bl.getPos().y();
+    int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
     if (big) {
         length = B_wide * 3 / 4;
         x += B_wide / 8;
