@@ -4,6 +4,7 @@ QVector<QVector<int>> di = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
 MAP::MAP(QWidget *parent) : QWidget(parent) {
     setFixedSize(850, 650);
+    block_pos = QVector<QVector<QVector<BLOCK*>>> (ROW, QVector<QVector<BLOCK*>> (COL, QVector<BLOCK*> (0)));
 }
 
 void MAP::getLevel(int level) {
@@ -19,10 +20,38 @@ void MAP::getLevel(int level) {
     while (!file.atEnd()){
        QByteArray buf = file.readLine();
        buffer.push_back(buf);
+       //qDebug("%s\n", buffer.back());
     }
     COL = buffer[0].toInt();
     ROW = buffer[1].toInt();
     mapInit();
+}
+
+void MAP::blockPosInit(int level)
+{
+    QDir *folder = new QDir;
+    bool folderCheck = folder->exists("./level");
+    if (!folderCheck) {
+        folder->mkpath("./level");
+    }
+    QString fileName = "./level/level" + QString::number(level) + "-" + QString::number(level) + ".txt";
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    while (!file.atEnd()){
+        QByteArray buf = file.readLine();
+        QString oneLine(buf);
+        //qDebug("%s\n", oneLine);
+        QVector<int> bl(5);
+        QString tmp;
+        for(int i=0, j=0, cnt=0; i<oneLine.size(); ++i){
+            if(oneLine[i] == ' '){
+                tmp = oneLine.mid(j, i-j);
+                bl[cnt++] = tmp.toInt();
+                tmp.clear();
+            }
+        }
+        block_pos[bl[3]][bl[4]].push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4]));
+    }
 }
 
 void MAP::mapInit() {
@@ -40,6 +69,7 @@ void MAP::mapInit() {
 void MAP::paintEvent(QPaintEvent *event){
     draw_frame();
     draw_block();
+
     update();
 }
 

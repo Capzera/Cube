@@ -25,10 +25,12 @@ public:
     void getLevel(int);//获取关卡数
     void operat(int);//玩家移动
     void mapInit();//地图预设
+    void blockPosInit(int);
     int ROW = 4, COL = 3, B_wide;//定义游戏区方格长、宽、像素点矩阵宽度
     QVector<QVector<int>> locate_x, locate_y, blocks;//像素坐标记录
     int player_x, player_y;
     BLOCK *PLAYER;
+    QVector<QVector<QVector<BLOCK*>>> block_pos;//
 };
 
 #endif // MAP_H

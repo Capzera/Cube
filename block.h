@@ -35,7 +35,7 @@ enum GRID_STATE {//方格状态
 class BLOCK
 {
 public:
-    BLOCK();
+    BLOCK(){};
     BLOCK(GRID_STATE state, BLOCK_COLOR color, BLOCK_STATE block_state, int x, int y);
     BLOCK(int state, int color, int block_state, int x, int y);
     ~BLOCK();
