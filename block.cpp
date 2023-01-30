@@ -37,5 +37,5 @@ void BLOCK::move(int& x, int& y) {
     _pos.setX(x);
     _pos.setY(y);
 }
-
+BLOCK::BLOCK(){}
 BLOCK::~BLOCK(){}

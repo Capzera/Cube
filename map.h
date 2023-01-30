@@ -22,6 +22,7 @@ public:
     void draw_block();//画方块
     void draw_puzzle_block(BLOCK*);
     void draw_player_block(BLOCK*);
+    void draw_finish_block(BLOCK*);
     void getLevel(int);//获取关卡数
     void operat(int);//玩家移动
     void mapInit();//地图预设

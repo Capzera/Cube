@@ -82,7 +82,12 @@ void MAP::draw_block() {
     for (int i = 0; i < ROW; i++) {
         for (int j = 0; j < COL; j++) {
             for (int k = 0; k < block_pos[i][j].size(); k++) {
-                draw_puzzle_block(block_pos[i][j][k]);
+                if (block_pos[i][j][k]->getState() == GRID_STATE::BLOCKS) {
+                    draw_puzzle_block(block_pos[i][j][k]);
+                }
+                if (block_pos[i][j][k]->getState() == GRID_STATE::FINISH) {
+                    draw_finish_block(block_pos[i][j][k]);
+                }
             }
         }
     }
@@ -91,16 +96,16 @@ void MAP::draw_block() {
 void MAP::draw_puzzle_block(BLOCK *bl) {
     QPainter paint(this);
     if (bl->getColor() == BLOCK_COLOR::RED) {
-        paint.setPen(QPen(Qt::red, 3, Qt::SolidLine));
+        paint.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap));
     }
     if (bl->getColor() == BLOCK_COLOR::BLUE) {
-        paint.setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+        paint.setPen(QPen(Qt::blue, 5, Qt::SolidLine, Qt::RoundCap));
     }
     if (bl->getColor() == BLOCK_COLOR::YELLOW) {
-        paint.setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
+        paint.setPen(QPen(Qt::yellow, 5, Qt::SolidLine, Qt::RoundCap));
     }
     if (bl->getColor() == BLOCK_COLOR::GREEN) {
-        paint.setPen(QPen(Qt::green, 3, Qt::SolidLine));
+        paint.setPen(QPen(Qt::green, 5, Qt::SolidLine, Qt::RoundCap));
     }
     bool big;
     int direct;
@@ -161,11 +166,41 @@ void MAP::draw_puzzle_block(BLOCK *bl) {
 }
 
 void MAP::draw_player_block(BLOCK *bl) {
-    int radius = B_wide * 2 / 10, split = B_wide * 4 / 10;
+    int radius = B_wide / 5, split = B_wide * 2 / 5;
     QPainter paint(this);
     paint.setPen(QPen(Qt::black, radius, Qt::SolidLine));
     int pos_x = bl->getPos().x(), pos_y = bl->getPos().y();
     int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
+    paint.drawEllipse(x + split, y + split, radius, radius);
+}
+
+void MAP::draw_finish_block(BLOCK *bl) {
+    QPainter paint(this);
+    switch(bl->getColor()) {
+        case BLOCK_COLOR::RED :
+            paint.setPen(QPen(Qt::red, 4, Qt::SolidLine));
+        break;
+        case BLOCK_COLOR::YELLOW :
+            paint.setPen(QPen(Qt::yellow, 4, Qt::SolidLine));
+        break;
+        case BLOCK_COLOR::BLUE :
+            paint.setPen(QPen(Qt::blue, 4, Qt::SolidLine));
+        break;
+        case BLOCK_COLOR::GREEN :
+            paint.setPen(QPen(Qt::green, 4, Qt::SolidLine));
+        break;
+        default:
+            paint.setPen(QPen(Qt::white, 5, Qt::SolidLine));
+        break;
+    }
+
+    int pos_x = bl->getPos().x(), pos_y = bl->getPos().y();
+    int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
+    int radius = B_wide * 3 / 4, split = B_wide / 8;
+    paint.drawEllipse(x + split, y + split, radius, radius);
+    radius = B_wide / 2, split = B_wide / 4;
+    paint.drawEllipse(x + split, y + split, radius, radius);
+    radius = B_wide / 4, split = B_wide * 3 / 8;
     paint.drawEllipse(x + split, y + split, radius, radius);
 }
 
