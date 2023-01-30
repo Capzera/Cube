@@ -101,9 +101,17 @@ void MAP::draw_puzzle_block(BLOCK bl) {
         break;
     }
     int length;
-    if (big) length = B_wide * 3 / 4;
-    else length = B_wide / 2;
-    int x = bl.getPos().x() + B_wide / 8, y = bl.getPos().y() + B_wide / 8;
+    int x = bl.getPos().x(), y = bl.getPos().y();
+    if (big) {
+        length = B_wide * 3 / 4;
+        x += B_wide / 8;
+        y += B_wide / 8;
+    }
+    else {
+        length = B_wide / 2;
+        x += B_wide / 4;
+        y += B_wide / 4;
+    }
     for (int i = 1; i <= 4; i++) {
         if (i == direct) continue;
         if (i == 1) paint.drawLine(QPoint(x, y), QPoint(x + length, y));
