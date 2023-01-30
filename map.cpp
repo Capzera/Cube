@@ -47,7 +47,9 @@ void MAP::draw_frame() {
 }
 
 void MAP::draw_block() {
+    BLOCK tmp(0,0,0,0,0);
     QPainter paint(this);
+    draw_puzzle_block(tmp);
 }
 
 void MAP::draw_puzzle_block(BLOCK bl) {

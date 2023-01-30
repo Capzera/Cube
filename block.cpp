@@ -25,3 +25,13 @@
      return this->_pos;
  }
 
+BLOCK::BLOCK(int state, int color, int block_state, int x, int y)
+{
+    _state = (enum GRID_STATE) state;
+    _color = (enum BLOCK_COLOR) color;
+    _block_state = (enum BLOCK_STATE) block_state;
+    _pos = QPoint(x, y);
+}
+
+BLOCK::~BLOCK()
+{}

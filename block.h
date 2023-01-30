@@ -15,7 +15,7 @@ enum BLOCK_STATE {//方块状态
 };
 
 enum BLOCK_COLOR {//方格A颜色
-    BLACK,
+    BLACK = 0,
     RED,
     YELLOW,
     BLUE,
@@ -24,7 +24,7 @@ enum BLOCK_COLOR {//方格A颜色
 };
 
 enum GRID_STATE {//方格状态
-    SPACE, //空白
+    SPACE = 0, //空白
     PLAYER,//玩家
     BARRIER,//障碍物
     BLOCKS,//方块
@@ -36,6 +36,7 @@ class BLOCK
 public:
     BLOCK();
     BLOCK(GRID_STATE state, BLOCK_COLOR color, BLOCK_STATE block_state, int x, int y);
+    BLOCK(int state, int color, int block_state, int x, int y);
     ~BLOCK();
 public:
     BLOCK_COLOR getColor();
