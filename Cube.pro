@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         widget.cpp \
-    map.cpp
+    map.cpp \
+    block.cpp
 
 HEADERS += \
         widget.h \
-    map.h
+    map.h \
+    block.h
 
 DISTFILES += \
     level/level1.txt \
