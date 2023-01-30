@@ -14,31 +14,6 @@
 #include <QString>
 #include "map.h"
 
-enum BLOCK_STATE {//方块状态
-    SMALL_LEFT,//小型方块开口朝左
-    SMALL_RIGHT,
-    SMALL_UP,
-    SMALL_DOWN,
-    BIG_LEFT,//大型方块开口朝右
-    BIG_RIGHT,
-    BIG_UP,
-    BIG_DOWN
-};
-
-enum BLOCK_COLOR {//方块颜色
-    RED,
-    YELLOW,
-    BLUE,
-    GREEN
-};
-
-enum GRID_STATE {//方格状态
-    PLAYER,//玩家
-    BARRIER,//障碍物
-    BLOCK,//方块
-    FINISH//终点
-};
-
 class Widget : public QWidget {
     Q_OBJECT
 public slots:

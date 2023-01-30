@@ -50,7 +50,7 @@ void MAP::draw_block() {
     QPainter paint(this);
 }
 
-void MAP::draw_big_block(BLOCK bl) {
+void MAP::draw_puzzle_block(BLOCK bl) {
     QPainter paint(this);
     if (bl.getColor() == BLOCK_COLOR::RED) {
         paint.setPen(QPen(Qt::red, 2, Qt::SolidLine));
@@ -64,51 +64,51 @@ void MAP::draw_big_block(BLOCK bl) {
     if (bl.getColor() == BLOCK_COLOR::GREEN) {
         paint.setPen(QPen(Qt::green, 2, Qt::SolidLine));
     }
-    int length = B_wide * 3 / 4;
-    int direct = 0;
+    bool big;
+    int direct;
     switch (bl.getBlockState()) {
-        case : BLOCK_STATE::BIG_UP;
+        case BLOCK_STATE::SMALL_UP :
             direct = 1;
+            big = 0;
         break;
-        case : BLOCK_STATE::BIG_DOWN;
+        case BLOCK_STATE::SMALL_DOWN :
             direct = 2;
+            big = 0;
         break;
-        case : BLOCK_STATE::BIG_LEFT;
+        case BLOCK_STATE::SMALL_LEFT :
             direct = 3;
+            big = 0;
         break;
-        case : BLOCK_STATE::BIG_RIGHT;
+        case BLOCK_STATE::SMALL_RIGHT :
             direct = 4;
+            big = 0;
         break;
-    }
-}
-
-void MAP::draw_small_block(BLOCK bl) {
-    QPainter paint(this);
-    if (bl.getColor() == BLOCK_COLOR::RED) {
-        paint.setPen(QPen(Qt::red, 2, Qt::SolidLine));
-    }
-    if (bl.getColor() == BLOCK_COLOR::BLUE) {
-        paint.setPen(QPen(Qt::blue, 2, Qt::SolidLine));
-    }
-    if (bl.getColor() == BLOCK_COLOR::YELLOW) {
-        paint.setPen(QPen(Qt::yellow, 2, Qt::SolidLine));
-    }
-    if (bl.getColor() == BLOCK_COLOR::GREEN) {
-        paint.setPen(QPen(Qt::green, 2, Qt::SolidLine));
-    }
-    int length = B_wide / 2;
-    switch (bl.getBlockState()) {
-        case : BLOCK_STATE::SMALL_UP;
+        case BLOCK_STATE::BIG_UP :
             direct = 1;
+            big = 1;
         break;
-        case : BLOCK_STATE::SMALL_DOWN;
+        case BLOCK_STATE::BIG_DOWN :
             direct = 2;
+            big = 1;
         break;
-        case : BLOCK_STATE::SMALL_LEFT;
+        case BLOCK_STATE::BIG_LEFT :
             direct = 3;
+            big = 1;
         break;
-        case : BLOCK_STATE::SMALL_RIGHT;
+        case BLOCK_STATE::BIG_RIGHT :
             direct = 4;
+            big = 1;
         break;
+    }
+    int length;
+    if (big) length = B_wide * 3 / 4;
+    else length = B_wide / 2;
+    int x = bl.getPos().x() + B_wide / 8, y = bl.getPos().y() + B_wide / 8;
+    for (int i = 1; i <= 4; i++) {
+        if (i == direct) continue;
+        if (i == 1) paint.drawLine(QPoint(x, y), QPoint(x + length, y));
+        if (i == 2) paint.drawLine(QPoint(x, y + length), QPoint(x + length, y + length));
+        if (i == 3) paint.drawLine(QPoint(x, y), QPoint(x, y + length));
+        if (i == 4) paint.drawLine(QPoint(x + length, y), QPoint(x + length, y + length));
     }
 }

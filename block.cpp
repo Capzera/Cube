@@ -1,8 +1,9 @@
 #include "block.h"
 
  BLOCK::BLOCK(GRID_STATE state, BLOCK_COLOR color, BLOCK_STATE block_state, int x, int y) :
-     _state(state), _color(color), _block_state(block_state), _x(x), _y(y)
- {}
+     _state(state), _color(color), _block_state(block_state), _pos(QPoint(x, y)) {
+
+ }
 
  BLOCK_COLOR BLOCK::getColor()
  {
@@ -19,8 +20,8 @@
      return this->_block_state;
  }
 
- int BLOCK::getRow()
- {return this->_x;}
+ QPoint BLOCK::getPos()
+ {
+     return this->_pos;
+ }
 
- int BLOCK::getCol()
- {return this->_y;}

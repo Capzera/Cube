@@ -20,8 +20,7 @@ public:
     void paintEvent(QPaintEvent*);
     void draw_frame();//画边框
     void draw_block();//画方块
-    void draw_big_block(BLOCK);
-    void draw_small_block(BLOCK);
+    void draw_puzzle_block(BLOCK);
     void draw_player_block(BLOCK);
     void getLevel(int);//获取关卡数
     void mapInit();//地图预设

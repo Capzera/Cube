@@ -1,5 +1,8 @@
 #ifndef BLOCK_H
 #define BLOCK_H
+
+#include<QPoint>
+
 enum BLOCK_STATE {//方块状态
     SMALL_LEFT,//小型方块开口朝左
     SMALL_RIGHT,
@@ -38,12 +41,11 @@ public:
     BLOCK_COLOR getColor();
     GRID_STATE getState();
     BLOCK_STATE getBlockState();
-    int         getRow();
-    int         getCol();
+    QPoint getPos();
 private:
     enum GRID_STATE _state;
     enum BLOCK_COLOR _color;
     enum BLOCK_STATE _block_state;
-    int _x, _y;
+    QPoint _pos;
 };
 #endif // BLOCK_H
