@@ -31,3 +31,7 @@ SOURCES += \
 HEADERS += \
         widget.h \
     map.h
+
+DISTFILES += \
+    level/level1.txt \
+    level/level2.txt
