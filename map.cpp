@@ -2,6 +2,7 @@
 
 QVector<QVector<int>> di = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 QMap<int, int> um = {{1, 2}, {2, 1}, {3, 4}, {4, 3}};
+
 MAP::MAP(QWidget *parent) : QWidget(parent) {
     setFixedSize(850, 650);
 }
@@ -34,28 +35,24 @@ void MAP::blockPosInit(int level)
     file.open(QIODevice::ReadOnly);
     while (!file.atEnd()){
         QByteArray buf = file.readLine();
-        QString oneLine(buf);
+        QString oneLine(buf), tmp;
         QVector<int> bl;
-        QString tmp;
         for(auto& c : oneLine){
             char x = c.toLatin1();
-            if (x == ' ') {
+            if (x == '%') {
                 bl.push_back(tmp.toInt());
                 tmp.clear();
             }
             else tmp += x;
         }
-        bl.push_back(tmp.toInt());
-        block_pos[bl[5]][bl[6]].push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5], bl[6]));
-        bl.clear();
+        blockPos.push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5]));
     }
 }
 
 void MAP::mapInit() {
-    PLAYER = new BLOCK(1,0,0,0,0,0,0);
+    PLAYER = new BLOCK(0,0,1,0,0,0);
     B_wide = 800 / COL;
     locate_x = locate_y = QVector<QVector<int>>(ROW, QVector<int>(COL));
-    block_pos = QVector<QVector<QVector<BLOCK*>>> (ROW, QVector<QVector<BLOCK*>> (COL, QVector<BLOCK*> (0)));
     for (int i = 0; i < ROW; i++) {
         for (int j = 0; j < COL; j++) {
             locate_x[i][j] = B_wide * j + 25;
@@ -79,16 +76,12 @@ void MAP::draw_frame() {
 
 void MAP::draw_block() {
     draw_player_block(PLAYER);
-    for (int i = 0; i < ROW; i++) {
-        for (int j = 0; j < COL; j++) {
-            for (int k = 0; k < block_pos[i][j].size(); k++) {
-                if (block_pos[i][j][k]->getState() == GRID_STATE::BLOCKS) {
-                    draw_puzzle_block(block_pos[i][j][k]);
-                }
-                if (block_pos[i][j][k]->getState() == GRID_STATE::FINISH) {
-                    draw_finish_block(block_pos[i][j][k]);
-                }
-            }
+    for (BLOCK *bp : blockPos) {
+        if (bp->getState() == GRID_STATE::FINISH) {
+            draw_finish_block(bp);
+        }
+        if (bp->getState() == GRID_STATE::BLOCKS) {
+            draw_puzzle_block(bp);
         }
     }
 }
@@ -107,40 +100,20 @@ void MAP::draw_puzzle_block(BLOCK *bl) {
     if (bl->getColor() == BLOCK_COLOR::GREEN) {
         paint.setPen(QPen(Qt::green, 5, Qt::SolidLine, Qt::RoundCap));
     }
-    bool big;
+    bool big = bl->getSize() == BLOCK_SIZE::BIG;
     int direct;
-    switch (bl->getBlockState()) {
-        case BLOCK_STATE::SMALL_UP :
+    switch (bl->getDirection()) {
+        case BLOCK_DIRECTION::UP :
             direct = 1;
-            big = 0;
         break;
-        case BLOCK_STATE::SMALL_DOWN :
+        case BLOCK_DIRECTION::DOWN :
             direct = 2;
-            big = 0;
         break;
-        case BLOCK_STATE::SMALL_LEFT :
+        case BLOCK_DIRECTION::LEFT :
             direct = 3;
-            big = 0;
         break;
-        case BLOCK_STATE::SMALL_RIGHT :
+        case BLOCK_DIRECTION::RIGHT :
             direct = 4;
-            big = 0;
-        break;
-        case BLOCK_STATE::BIG_UP :
-            direct = 1;
-            big = 1;
-        break;
-        case BLOCK_STATE::BIG_DOWN :
-            direct = 2;
-            big = 1;
-        break;
-        case BLOCK_STATE::BIG_LEFT :
-            direct = 3;
-            big = 1;
-        break;
-        case BLOCK_STATE::BIG_RIGHT :
-            direct = 4;
-            big = 1;
         break;
     }
     int length;
@@ -204,84 +177,9 @@ void MAP::draw_finish_block(BLOCK *bl) {
     paint.drawEllipse(x + split, y + split, radius, radius);
 }
 
-bool MAP::checkIsInto(int mx, int my, int d)
-{
-    for(int i=0; i<block_pos[mx][my].size(); ++i){
-        if(block_pos[mx][my][i]->getState() != GRID_STATE::FINISH && checkDirection(d, block_pos[mx][my][i]->getDirection()))
-            return true;
-    }
-    return false;
-}
-
-bool MAP::checkOnlyBig(int x, int y)
-{
-    for(int i=0; i<block_pos[x][y].size(); ++i){
-        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH && block_pos[x][y][i]->getSize() != BLOCK_SIZE::BIG)
-            return false;
-    }
-    return true;
-}
-
-bool MAP::checkOnlySmall(int x, int y)
-{
-    for(int i=0; i<block_pos[x][y].size(); ++i){
-        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH && block_pos[x][y][i]->getSize() != BLOCK_SIZE::SMALL)
-            return false;
-    }
-    return true;
-}
-
-bool MAP::checkPush(int mx, int my, int d)
-{
-
-    int mmx = mx + di[d][0], mmy = my + di[d][1];
-    if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return false;
-    if(!block_pos[mmx][mmy].size()) return true;
-    if(block_pos[mmx][mmy].size() == 1 && block_pos[mmx][mmy][0]->getState() == GRID_STATE::FINISH) return true;
-    if(checkOnlySmall(mmx, mmy) && checkOnlyBig(mx, my))    return true;
-    if(checkOnlyBig(mmx, mmy) && checkOnlySmall(mx, my) && checkDirection(d, block_pos[mmx][mmy][0]->getDirection())) {
-        return true;
-    }
-    return false;
-}
-
-bool MAP::checkDirection(int& a, BLOCK_DIRECTION b)
-{
-    if (b == BLOCK_DIRECTION::UP) qDebug() << "yes";
-    return um[a] == b;
-}
-
-void MAP::blockMove(int mx, int my, int d)
-{
-     int x = mx + di[d][0], y = my + di[d][1];
-     for(int i=0; i<block_pos[mx][my].size(); ++i){
-
-         if(block_pos[mx][my][i]->getState() == GRID_STATE::FINISH) continue;
-         block_pos[mx][my][i]->move(x, y);
-         block_pos[x][y].push_back(block_pos[mx][my][i]);
-     }
-     block_pos[mx][my].clear();
-}
-
 void MAP::operat(int d) {
     int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
     int mx = x + di[d][0], my = y + di[d][1];
     if (mx < 0 || mx == ROW || my < 0 || my == COL) return;
-    int cnt = block_pos[x][y].size();
-    //qDebug()<<cnt<<endl;
-    //w-1, s-2, a-3, d-4
-    if(cnt < 2){
-        if(!block_pos[mx][my].size() || checkIsInto(mx, my, d))
-            PLAYER->move(mx, my);
-        if(block_pos[mx][my].size() && !checkIsInto(mx, my, d) && checkPush(mx, my, d)){
-            blockMove(mx, my, d);
-            PLAYER->move(mx, my);
-        }
-    }
-    if(cnt == 2){
-
-    }
-    if(cnt == 3){
-
-    }
+    PLAYER->move(mx, my);
 }

@@ -5,26 +5,16 @@
 #include <QVector>
 
 enum BLOCK_SIZE{
+    SMALL,
     BIG,
-    SMALL
-};
-
-enum BLOCK_STATE {//方块状态
-    SMALL_LEFT,//小型方块开口朝左
-    SMALL_RIGHT,
-    SMALL_UP,
-    SMALL_DOWN,
-    BIG_LEFT,//大型方块开口朝右
-    BIG_RIGHT,
-    BIG_UP,
-    BIG_DOWN
+    NONE
 };
 
 enum BLOCK_DIRECTION{
     UP = 1,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
 };
 
 enum BLOCK_COLOR {//方格A颜色
@@ -48,11 +38,9 @@ class BLOCK
 {
 public:
     BLOCK();
-    BLOCK(GRID_STATE , BLOCK_COLOR , BLOCK_STATE , BLOCK_DIRECTION , BLOCK_SIZE , int , int);
-    BLOCK(int, int, int, int, int, int, int);
+    BLOCK(int, int, int, int, int, int);
     BLOCK_COLOR getColor();
     GRID_STATE getState();
-    BLOCK_STATE getBlockState();
     BLOCK_DIRECTION getDirection();
     BLOCK_SIZE getSize();
     QPoint getPos();
@@ -61,7 +49,6 @@ public:
 private:
     enum GRID_STATE _state;
     enum BLOCK_COLOR _color;
-    enum BLOCK_STATE _block_state;
     enum BLOCK_DIRECTION _direction;
     enum BLOCK_SIZE _size;
     QPoint _pos;
