@@ -46,16 +46,17 @@ void MAP::blockPosInit(int level)
             else tmp += x;
         }
         bl.push_back(tmp.toInt());
-        block_pos[bl[3]][bl[4]].push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4]));
+        block_pos[bl[5]][bl[6]].push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5], bl[6]));
         bl.clear();
     }
 }
 
 void MAP::mapInit() {
-    PLAYER = new BLOCK(1,0,0,0,0);
+    PLAYER = new BLOCK(1,0,0,0,0,0,0);
     B_wide = 800 / COL;
     locate_x = locate_y = QVector<QVector<int>>(ROW, QVector<int>(COL));
     block_pos = QVector<QVector<QVector<BLOCK*>>> (ROW, QVector<QVector<BLOCK*>> (COL, QVector<BLOCK*> (0)));
+    um[1] = 2, um[2] = 1, um[3] = 4, um[4] = 3;
     for (int i = 0; i < ROW; i++) {
         for (int j = 0; j < COL; j++) {
             locate_x[i][j] = B_wide * j + 25;
@@ -204,9 +205,88 @@ void MAP::draw_finish_block(BLOCK *bl) {
     paint.drawEllipse(x + split, y + split, radius, radius);
 }
 
+bool MAP::checkIsInto(int mx, int my, int d)
+{
+    for(int i=0; i<block_pos[mx][my].size(); ++i){
+        if(block_pos[mx][my][i]->getState() != GRID_STATE::FINISH && checkDirection(d, block_pos[mx][my][i]->getDirection()))
+            return true;
+    }
+    return false;
+}
+
+bool MAP::checkOnlyBig(int x, int y)
+{
+    for(int i=0; i<block_pos[x][y].size(); ++i){
+        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH || block_pos[x][y][i]->getState() != BLOCK_SIZE::BIG)
+            return false;
+    }
+    return true;
+}
+
+bool MAP::checkOnlySmall(int x, int y)
+{
+    for(int i=0; i<block_pos[x][y].size(); ++i){
+        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH || block_pos[x][y][i]->getState() != BLOCK_SIZE::SMALL)
+            return false;
+    }
+    return true;
+}
+
+bool MAP::checkDirection(int a, int b)
+{
+    qDebug()<<a<<b;
+    if(um[a] == b)  return true;
+    return false;
+}
+
+bool MAP::checkPush(int mx, int my, int d)
+{
+
+    int x = mx + di[d][0], y = my + di[d][1];
+    if (x < 0 || x == ROW || y < 0 || y == COL) return false;
+    if(!block_pos[x][y].size()) return true;
+    if(block_pos[x][y].size() == 1 && block_pos[x][y][0]->getState() == GRID_STATE::FINISH) return true;
+    if(checkOnlySmall(x, y) && checkOnlyBig(mx, my))    return true;
+    //
+    if(checkOnlyBig(x, y) && checkOnlySmall(mx, my) && checkDirection(d, block_pos[x][y][0]->getDirection())) {
+        return true;}
+    return false;
+}
+
+void MAP::blockMove(int mx, int my, int d)
+{
+     int x = mx + di[d][0], y = my + di[d][1];
+     for(int i=0; i<block_pos[mx][my].size(); ++i){
+
+         if(block_pos[mx][my][i]->getState() == GRID_STATE::FINISH) continue;
+         block_pos[mx][my][i]->move(x, y);
+         block_pos[x][y].push_back(block_pos[mx][my][i]);
+     }
+     block_pos[mx][my].clear();
+}
+
 void MAP::operat(int d) {
     int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
     int mx = x + di[d][0], my = y + di[d][1];
     if (mx < 0 || mx == ROW || my < 0 || my == COL) return;
-    PLAYER->move(mx, my);
+    int cnt = block_pos[x][y].size();
+    //qDebug()<<cnt<<endl;
+    //w-1, s-2, a-3, d-4
+    if(cnt == 0){
+        if(!block_pos[mx][my].size() || checkIsInto(mx, my, d))
+            PLAYER->move(mx, my);
+        if(block_pos[mx][my].size() && !checkIsInto(mx, my, d) && checkPush(mx, my, d)){
+            blockMove(mx, my, d);
+            PLAYER->move(mx, my);
+        }
+    }
+    if(cnt == 1){
+        qDebug()<<cnt;
+    }
+    if(cnt == 2){
+
+    }
+    if(cnt == 3){
+
+    }
 }
