@@ -196,7 +196,6 @@ void MAP::operat(int d) {
                 if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return;
                 QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
                 if (target2.size() && target2[0]->getSize() == target[0]->getSize()) return;
-                qDebug() << target[0]->getSize();
                 if (target2.size() && target[0]->isSmall() && !canInto(target2[0], d)) return;
                 if (target2.size() && target[0]->isBig() && target[0]->getDirection() != d) return;
                 PLAYER->move(mx, my);
@@ -209,6 +208,8 @@ void MAP::operat(int d) {
             }
             else {
                 if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return;
+                QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
+                if (target2.size()) return;
                 PLAYER->move(mx, my);
                 target[0]->move(mmx, mmy);
                 target[1]->move(mmx, mmy);
@@ -227,16 +228,11 @@ void MAP::operat(int d) {
             }
         }
         else {//当前格内2个方块
-            if (cur[0]->getDirection() == d  && cur[1]->getDirection() == d) {
-                PLAYER->move(mx, my);
-            }
-            else {
-                if (target.size()) return;
-                PLAYER->move(mx, my);
-                cur[0]->move(mx, my);
-                cur[1]->move(mx, my);
-            }
+            PLAYER->move(mx, my);
         }
+    }
+    if (Victory()) {
+
     }
 }
 
