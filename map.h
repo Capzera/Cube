@@ -8,7 +8,7 @@
 #include <QDir>
 #include <QString>
 #include <QDebug>
-#include <QHash>
+#include <QMap>
 #include "block.h"
 
 class MAP : public QWidget
@@ -29,20 +29,19 @@ public:
     void mapInit();//地图预设
     void blockPosInit(int);
 public:
-    bool checkIsInto(int mx, int my, int d);//是否能进入
-    bool checkPush(int mx, int my, int d);//是否能推动
-    void blockMove(int mx, int my, int d);//推箱子
+    bool checkIsInto(int, int, int);//是否能进入
+    bool checkPush(int, int, int);//是否能推动
+    void blockMove(int, int, int);//推箱子
    // bool checkBlockState(int x, int y, int mx, int my);
-    bool checkOnlyBig(int x, int y);
-    bool checkOnlySmall(int x, int y);
-    bool checkDirection(int a, int b);
+    bool checkOnlyBig(int, int);
+    bool checkOnlySmall(int, int);
+    bool checkDirection(int&, BLOCK_DIRECTION);
 public:
     int ROW = 4, COL = 3, B_wide;//定义游戏区方格长、宽、像素点矩阵宽度
     QVector<QVector<int>> locate_x, locate_y, blocks;//像素坐标记录
     int player_x, player_y;
     BLOCK *PLAYER;
     QVector<QVector<QVector<BLOCK*>>> block_pos;
-    QHash<int, int>     um;
 };
 
 #endif // MAP_H

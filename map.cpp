@@ -1,7 +1,7 @@
 #include "map.h"
 
 QVector<QVector<int>> di = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
+QMap<int, int> um = {{1, 2}, {2, 1}, {3, 4}, {4, 3}};
 MAP::MAP(QWidget *parent) : QWidget(parent) {
     setFixedSize(850, 650);
 }
@@ -56,7 +56,6 @@ void MAP::mapInit() {
     B_wide = 800 / COL;
     locate_x = locate_y = QVector<QVector<int>>(ROW, QVector<int>(COL));
     block_pos = QVector<QVector<QVector<BLOCK*>>> (ROW, QVector<QVector<BLOCK*>> (COL, QVector<BLOCK*> (0)));
-    um[1] = 2, um[2] = 1, um[3] = 4, um[4] = 3;
     for (int i = 0; i < ROW; i++) {
         for (int j = 0; j < COL; j++) {
             locate_x[i][j] = B_wide * j + 25;
@@ -217,7 +216,7 @@ bool MAP::checkIsInto(int mx, int my, int d)
 bool MAP::checkOnlyBig(int x, int y)
 {
     for(int i=0; i<block_pos[x][y].size(); ++i){
-        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH || block_pos[x][y][i]->getState() != BLOCK_SIZE::BIG)
+        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH && block_pos[x][y][i]->getSize() != BLOCK_SIZE::BIG)
             return false;
     }
     return true;
@@ -226,17 +225,10 @@ bool MAP::checkOnlyBig(int x, int y)
 bool MAP::checkOnlySmall(int x, int y)
 {
     for(int i=0; i<block_pos[x][y].size(); ++i){
-        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH || block_pos[x][y][i]->getState() != BLOCK_SIZE::SMALL)
+        if(block_pos[x][y][i]->getState() != GRID_STATE::FINISH && block_pos[x][y][i]->getSize() != BLOCK_SIZE::SMALL)
             return false;
     }
     return true;
-}
-
-bool MAP::checkDirection(int a, int b)
-{
-    qDebug()<<b;
-    if(um[a] == b)  return true;
-    return false;
 }
 
 bool MAP::checkPush(int mx, int my, int d)
@@ -247,12 +239,17 @@ bool MAP::checkPush(int mx, int my, int d)
     if(!block_pos[mmx][mmy].size()) return true;
     if(block_pos[mmx][mmy].size() == 1 && block_pos[mmx][mmy][0]->getState() == GRID_STATE::FINISH) return true;
     if(checkOnlySmall(mmx, mmy) && checkOnlyBig(mx, my))    return true;
-    //
-    int z = block_pos[mmx][mmy][0]->getDirection();
-    qDebug()<<z;
+    if (checkOnlyBig(mmx, mmy)) qDebug() << 1;
     if(checkOnlyBig(mmx, mmy) && checkOnlySmall(mx, my) && checkDirection(d, block_pos[mmx][mmy][0]->getDirection())) {
-        return true;}
+        return true;
+    }
     return false;
+}
+
+bool MAP::checkDirection(int& a, BLOCK_DIRECTION b)
+{
+    if (b == BLOCK_DIRECTION::UP) qDebug() << "yes";
+    return um[a] == b;
 }
 
 void MAP::blockMove(int mx, int my, int d)
@@ -274,16 +271,13 @@ void MAP::operat(int d) {
     int cnt = block_pos[x][y].size();
     //qDebug()<<cnt<<endl;
     //w-1, s-2, a-3, d-4
-    if(cnt == 0){
+    if(cnt < 2){
         if(!block_pos[mx][my].size() || checkIsInto(mx, my, d))
             PLAYER->move(mx, my);
         if(block_pos[mx][my].size() && !checkIsInto(mx, my, d) && checkPush(mx, my, d)){
             blockMove(mx, my, d);
             PLAYER->move(mx, my);
         }
-    }
-    if(cnt == 1){
-        qDebug()<<cnt;
     }
     if(cnt == 2){
 

@@ -50,8 +50,6 @@ public:
     BLOCK();
     BLOCK(GRID_STATE , BLOCK_COLOR , BLOCK_STATE , BLOCK_DIRECTION , BLOCK_SIZE , int , int);
     BLOCK(int, int, int, int, int, int, int);
-    ~BLOCK();
-public:
     BLOCK_COLOR getColor();
     GRID_STATE getState();
     BLOCK_STATE getBlockState();
@@ -59,6 +57,7 @@ public:
     BLOCK_SIZE getSize();
     QPoint getPos();
     void move(int&, int&);//移动
+    ~BLOCK();
 private:
     enum GRID_STATE _state;
     enum BLOCK_COLOR _color;
