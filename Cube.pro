@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         widget.cpp \
     map.cpp \
-    block.cpp
+    block.cpp \
+    barrier.cpp
 
 HEADERS += \
         widget.h \
     map.h \
-    block.h
+    block.h \
+    barrier.h
 
 DISTFILES += \
     level/level1.txt \
