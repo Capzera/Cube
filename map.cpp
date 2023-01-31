@@ -34,6 +34,7 @@ void MAP::blockPosInit(int level)
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
     blockPos.clear();
+    barrier.clear();
     while (!file.atEnd()){
         QByteArray buf = file.readLine();
         QString oneLine(buf), tmp;
@@ -80,25 +81,12 @@ void MAP::paintEvent(QPaintEvent *event){
 void MAP::draw_barrier()
 {
     QPainter paint(this);
-    paint.setPen(QPen(Qt::black, 4,Qt::SolidLine));
-    for(int i=0; i<barrier.size(); ++i){
+    for(int i=0; i<barrier.size(); ++i) {
         int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
         int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
-        paint.drawRect(x, y, B_wide, B_wide);
+        paint.fillRect(QRect(x, y, B_wide, B_wide), Qt::SolidPattern);
     }
 }
-
-
-//void MAP::draw_barrier(QVector<BARRIER*> barrier)
-//{
-//    QPainter paint(this);
-//    paint.setPen(QPen(Qt::black, 4,Qt::SolidLine));
-//    for(int i=0; i<barrier.size(); ++i){
-//        int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
-//        int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
-//        paint.drawRect(x, y, B_wide, B_wide);
-//    }
-//}
 
 void MAP::draw_frame() {
     QPainter painter(this);
@@ -248,7 +236,7 @@ void MAP::operat(int d) {
         }
     }
     else {
-        if (cur.size() == 1) {//当前格内1个方块
+        if (cur.size() == 1) {//当前格内1个方块b
             if (cur[0]->getDirection() == d) {//从当前方块开口出来
                 PLAYER->move(mx, my);
             }

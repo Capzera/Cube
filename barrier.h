@@ -8,10 +8,10 @@ class BARRIER
 {
 public:
     BARRIER();
-    BARRIER(int , int);
+    BARRIER(int, int);
     ~BARRIER();
 public:
-    bool isBarrier(int , int);
+    bool isBarrier(int, int);
     QPoint getPos();
 
 public:
