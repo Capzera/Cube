@@ -232,8 +232,26 @@ void MAP::operat(int d) {
         }
     }
     if (Victory()) {
-
+        qDebug()<<"Yes";
     }
+}
+
+bool MAP::Victory()
+{
+    for(int i=0, cnt=0; i<blockPos.size(); ++i){
+        cnt++;
+        if(cnt == 3){
+            cnt = 0;
+            int x = blockPos[i]->getPos().x(), y = blockPos[i]->getPos().y();
+            BLOCK_COLOR color = blockPos[i]->getColor();
+            QVector<BLOCK*> tmp = targetGrid(x, y);
+            if(tmp.size() != 2) return false;
+            for(int j=0; i<2; ++j){
+                if(tmp[j]->getColor() != color) return false;
+            }
+        }
+    }
+    return true;
 }
 
 QVector<BLOCK*> MAP::targetGrid(int x, int y) {
