@@ -33,6 +33,7 @@ void MAP::blockPosInit(int level)
     QString fileName = "./level/level" + QString::number(level) + "-1" + ".txt";
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
+    blockPos.clear();
     while (!file.atEnd()){
         QByteArray buf = file.readLine();
         QString oneLine(buf), tmp;
@@ -180,6 +181,75 @@ void MAP::draw_finish_block(BLOCK *bl) {
 void MAP::operat(int d) {
     int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
     int mx = x + di[d][0], my = y + di[d][1];
+    int mmx = mx + di[d][0], mmy = my + di[d][1];
     if (mx < 0 || mx == ROW || my < 0 || my == COL) return;
-    PLAYER->move(mx, my);
+    QVector<BLOCK*> cur = targetGrid(x, y), target = targetGrid(mx, my);
+    if (cur.empty()) {//当前格无方块
+        if (target.empty()) {
+            PLAYER->move(mx, my);
+        }
+        if (target.size() == 1) {
+            if (canInto(target[0], d)) {
+                PLAYER->move(mx, my);
+            }
+            else {
+                if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return;
+                QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
+                if (target2.size() && target2[0]->getSize() == target[0]->getSize()) return;
+                qDebug() << target[0]->getSize();
+                if (target2.size() && target[0]->isSmall() && !canInto(target2[0], d)) return;
+                if (target2.size() && target[0]->isBig() && target[0]->getDirection() != d) return;
+                PLAYER->move(mx, my);
+                target[0]->move(mmx, mmy);
+            }
+        }
+        if (target.size() == 2) {
+            if (canInto(target[0], d) && canInto(target[1], d)) {
+                PLAYER->move(mx, my);
+            }
+            else {
+                if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return;
+                PLAYER->move(mx, my);
+                target[0]->move(mmx, mmy);
+                target[1]->move(mmx, mmy);
+            }
+        }
+    }
+    else {
+        if (cur.size() == 1) {//当前格内1个方块
+            if (cur[0]->getDirection() == d) {//从当前方块开口出来
+                PLAYER->move(mx, my);
+            }
+            else {
+                if (target.size()) return;
+                PLAYER->move(mx, my);
+                cur[0]->move(mx, my);
+            }
+        }
+        else {//当前格内2个方块
+            if (cur[0]->getDirection() == d  && cur[1]->getDirection() == d) {
+                PLAYER->move(mx, my);
+            }
+            else {
+                if (target.size()) return;
+                PLAYER->move(mx, my);
+                cur[0]->move(mx, my);
+                cur[1]->move(mx, my);
+            }
+        }
+    }
+}
+
+QVector<BLOCK*> MAP::targetGrid(int x, int y) {
+    QVector<BLOCK*> ret;
+    for (BLOCK* bp : blockPos) {
+        if (bp->getState() != GRID_STATE::FINISH && bp->getPos().x() == x && bp->getPos().y() == y) {
+            ret.push_back(bp);
+        }
+    }
+    return ret;
+}
+
+bool MAP::canInto(BLOCK *bl, int d) {
+    return bl->getDirection() == um[d];
 }

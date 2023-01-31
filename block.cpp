@@ -39,6 +39,14 @@ void BLOCK::move(int& x, int& y) {
     _pos.setY(y);
 }
 
+bool BLOCK::isSmall() {
+    return _size == BLOCK_SIZE::SMALL;
+}
+
+bool BLOCK::isBig() {
+    return _size == BLOCK_SIZE::BIG;
+}
+
 BLOCK::BLOCK(){}
 
 BLOCK::~BLOCK(){}

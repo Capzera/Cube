@@ -45,6 +45,8 @@ public:
     BLOCK_SIZE getSize();
     QPoint getPos();
     void move(int&, int&);//移动
+    bool isSmall();
+    bool isBig();
     ~BLOCK();
 private:
     enum GRID_STATE _state;
