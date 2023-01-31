@@ -48,8 +48,8 @@ class BLOCK
 {
 public:
     BLOCK();
-    BLOCK(GRID_STATE state, BLOCK_COLOR color, BLOCK_STATE block_state, BLOCK_DIRECTION director, BLOCK_SIZE size, int x, int y);
-    BLOCK(int state, int color, int block_state, int direction, int size, int x, int y);
+    BLOCK(GRID_STATE , BLOCK_COLOR , BLOCK_STATE , BLOCK_DIRECTION , BLOCK_SIZE , int , int);
+    BLOCK(int, int, int, int, int, int, int);
     ~BLOCK();
 public:
     BLOCK_COLOR getColor();

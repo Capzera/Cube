@@ -234,7 +234,7 @@ bool MAP::checkOnlySmall(int x, int y)
 
 bool MAP::checkDirection(int a, int b)
 {
-    qDebug()<<a<<b;
+    qDebug()<<b;
     if(um[a] == b)  return true;
     return false;
 }
@@ -242,13 +242,15 @@ bool MAP::checkDirection(int a, int b)
 bool MAP::checkPush(int mx, int my, int d)
 {
 
-    int x = mx + di[d][0], y = my + di[d][1];
-    if (x < 0 || x == ROW || y < 0 || y == COL) return false;
-    if(!block_pos[x][y].size()) return true;
-    if(block_pos[x][y].size() == 1 && block_pos[x][y][0]->getState() == GRID_STATE::FINISH) return true;
-    if(checkOnlySmall(x, y) && checkOnlyBig(mx, my))    return true;
+    int mmx = mx + di[d][0], mmy = my + di[d][1];
+    if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return false;
+    if(!block_pos[mmx][mmy].size()) return true;
+    if(block_pos[mmx][mmy].size() == 1 && block_pos[mmx][mmy][0]->getState() == GRID_STATE::FINISH) return true;
+    if(checkOnlySmall(mmx, mmy) && checkOnlyBig(mx, my))    return true;
     //
-    if(checkOnlyBig(x, y) && checkOnlySmall(mx, my) && checkDirection(d, block_pos[x][y][0]->getDirection())) {
+    int z = block_pos[mmx][mmy][0]->getDirection();
+    qDebug()<<z;
+    if(checkOnlyBig(mmx, mmy) && checkOnlySmall(mx, my) && checkDirection(d, block_pos[mmx][mmy][0]->getDirection())) {
         return true;}
     return false;
 }
