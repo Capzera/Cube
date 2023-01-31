@@ -29,7 +29,6 @@ enum BLOCK_COLOR {//方格A颜色
 enum GRID_STATE {//方格状态
     SPACE = 0, //空白
     PLAYER,//玩家
-    //BARRIER,//障碍物
     BLOCKS,//方块
     FINISH//终点
 };

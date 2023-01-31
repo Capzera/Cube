@@ -81,6 +81,7 @@ void MAP::paintEvent(QPaintEvent *event){
 void MAP::draw_barrier()
 {
     QPainter paint(this);
+    paint.setPen(QPen(Qt::black, 4, Qt::SolidLine));
     for(int i=0; i<barrier.size(); ++i) {
         int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
         int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
