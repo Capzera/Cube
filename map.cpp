@@ -258,19 +258,36 @@ void MAP::operat(int d) {
 
 bool MAP::Victory()
 {
+    QVector<BLOCK_COLOR> fin;
     for(int i=0, cnt=0; i<blockPos.size(); ++i){
-        cnt++;
-        if(cnt == 3){
-            cnt = 0;
-            int x = blockPos[i]->getPos().x(), y = blockPos[i]->getPos().y();
-            BLOCK_COLOR color = blockPos[i]->getColor();
-            QVector<BLOCK*> tmp = targetGrid(x, y);
-            if(tmp.size() != 2) return false;
-            for(int j=0; i<2; ++j){
-                if(tmp[j]->getColor() != color) return false;
+        BLOCK_COLOR color = blockPos[i]->getColor();
+        um_vt[color].push_back(blockPos[i]->getPos());
+        if(blockPos[i]->getState() == GRID_STATE::FINISH){
+            fin.push_back(blockPos[i]->getColor());
+            QVector<BLOCK*> tmp;
+            tmp = targetGrid(blockPos[i]->getPos().x(), blockPos[i]->getPos().y());
+            for(int j=0; j<tmp.size(); ++j){
+                if(tmp[j]->getColor() != blockPos[i]->getColor()){
+                    return false;
+                }
+
             }
         }
     }
+    for(auto& color : fin){
+        QSet<int> st;
+        for(auto& pos : um_vt[color]){
+            int x = pos.x(), y = pos.y();
+            st.insert(x);
+            st.insert(y);
+        }
+        um_vt[color].clear();
+        if(st.size() > 2){
+            return false;
+        }
+        st.clear();
+    }
+    um_vt.clear();
     return true;
 }
 
