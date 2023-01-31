@@ -3,7 +3,7 @@
 BARRIER::BARRIER()
 {}
 
-BARRIER::BARRIER(int x, int y) : _pos(QPoint(x, y))
+BARRIER::BARRIER(int x, int y, int color, int state) : _pos(QPoint(x, y)), _color(color), _state(state)
 {}
 
 bool BARRIER::isBarrier(int x, int y)

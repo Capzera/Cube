@@ -38,15 +38,20 @@ void MAP::blockPosInit(int level)
         QByteArray buf = file.readLine();
         QString oneLine(buf), tmp;
         QVector<int> bl;
+        bool flag = false;
         for(auto& c : oneLine){
             char x = c.toLatin1();
+            if(x == '!') flag = true;
             if (x == '%') {
                 bl.push_back(tmp.toInt());
                 tmp.clear();
             }
             else tmp += x;
         }
-        blockPos.push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5]));
+        if(!flag)
+            blockPos.push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5]));
+        if(flag)
+            barrier.push_back(new BARRIER(bl[0], bl[1], bl[2], bl[3]));
     }
 }
 

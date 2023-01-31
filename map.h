@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QMap>
 #include "block.h"
+#include "barrier.h"
 
 class MAP : public QWidget
 {
@@ -40,6 +41,7 @@ public:
     int player_x, player_y;
     BLOCK *PLAYER;
     QVector<BLOCK*> blockPos;
+    QVector<BARRIER*> barrier;
 };
 
 #endif // MAP_H
