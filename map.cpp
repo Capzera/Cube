@@ -239,7 +239,6 @@ bool MAP::checkPush(int mx, int my, int d)
     if(!block_pos[mmx][mmy].size()) return true;
     if(block_pos[mmx][mmy].size() == 1 && block_pos[mmx][mmy][0]->getState() == GRID_STATE::FINISH) return true;
     if(checkOnlySmall(mmx, mmy) && checkOnlyBig(mx, my))    return true;
-    if (checkOnlyBig(mmx, mmy)) qDebug() << 1;
     if(checkOnlyBig(mmx, mmy) && checkOnlySmall(mx, my) && checkDirection(d, block_pos[mmx][mmy][0]->getDirection())) {
         return true;
     }
