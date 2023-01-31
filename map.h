@@ -40,7 +40,6 @@ public:
 public:
     int ROW = 4, COL = 3, B_wide;//定义游戏区方格长、宽、像素点矩阵宽度
     QVector<QVector<int>> locate_x, locate_y, blocks;//像素坐标记录
-    QMap<BLOCK_COLOR, QVector<QPoint>>  um_vt;
     int player_x, player_y;
     BLOCK *PLAYER;
     QVector<BLOCK*> blockPos;

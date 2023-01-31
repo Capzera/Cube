@@ -259,6 +259,7 @@ void MAP::operat(int d) {
 bool MAP::Victory()
 {
     QVector<BLOCK_COLOR> fin;
+    QMap<BLOCK_COLOR, QVector<QPoint>>  um_vt;
     for(int i=0, cnt=0; i<blockPos.size(); ++i){
         BLOCK_COLOR color = blockPos[i]->getColor();
         um_vt[color].push_back(blockPos[i]->getPos());
@@ -281,13 +282,11 @@ bool MAP::Victory()
             st.insert(x);
             st.insert(y);
         }
-        um_vt[color].clear();
         if(st.size() > 2){
             return false;
         }
         st.clear();
     }
-    um_vt.clear();
     return true;
 }
 
