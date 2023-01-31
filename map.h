@@ -22,6 +22,7 @@ public:
     void paintEvent(QPaintEvent*);
     void draw_frame();//画边框
     void draw_block();//画方块
+    void draw_barrier();//画障碍
     void draw_puzzle_block(BLOCK*);
     void draw_player_block(BLOCK*);
     void draw_finish_block(BLOCK*);

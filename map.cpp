@@ -41,8 +41,11 @@ void MAP::blockPosInit(int level)
         bool flag = false;
         for(auto& c : oneLine){
             char x = c.toLatin1();
-            if(x == '!') flag = true;
-            if (x == '%') {
+            if(x == '!'){
+                flag = true;
+                continue;
+            }
+            if(x == '%') {
                 bl.push_back(tmp.toInt());
                 tmp.clear();
             }
@@ -51,7 +54,7 @@ void MAP::blockPosInit(int level)
         if(!flag)
             blockPos.push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5]));
         if(flag)
-            barrier.push_back(new BARRIER(bl[0], bl[1], bl[2], bl[3]));
+            barrier.push_back(new BARRIER(bl[0], bl[1]));
     }
 }
 
@@ -70,9 +73,32 @@ void MAP::mapInit() {
 void MAP::paintEvent(QPaintEvent *event){
     draw_frame();
     draw_block();
-
+    draw_barrier();
     update();
 }
+
+void MAP::draw_barrier()
+{
+    QPainter paint(this);
+    paint.setPen(QPen(Qt::black, 4,Qt::SolidLine));
+    for(int i=0; i<barrier.size(); ++i){
+        int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
+        int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
+        paint.drawRect(x, y, B_wide, B_wide);
+    }
+}
+
+
+//void MAP::draw_barrier(QVector<BARRIER*> barrier)
+//{
+//    QPainter paint(this);
+//    paint.setPen(QPen(Qt::black, 4,Qt::SolidLine));
+//    for(int i=0; i<barrier.size(); ++i){
+//        int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
+//        int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
+//        paint.drawRect(x, y, B_wide, B_wide);
+//    }
+//}
 
 void MAP::draw_frame() {
     QPainter painter(this);
