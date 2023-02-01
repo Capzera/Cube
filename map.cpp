@@ -212,10 +212,11 @@ bool MAP::operat(int d) {
     int mx = x + di[d][0], my = y + di[d][1];
     int mmx = mx + di[d][0], mmy = my + di[d][1];
     if (mx < 0 || mx == ROW || my < 0 || my == COL) return false;
+    if(isBarrier(mx, my)) return false;
     QVector<BLOCK*> cur = targetGrid(x, y), target = targetGrid(mx, my);
 
     if (cur.empty()) {//当前格无方块
-        if (target.empty() && !isBarrier(mx, my)) {
+        if (target.empty()) {
             PLAYER->move(mx, my);
         }
         if (target.size() == 1) {
@@ -224,6 +225,7 @@ bool MAP::operat(int d) {
             }
             else {
                 if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return false;
+                if(isBarrier(mmx, mmy)) return false;
                 QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
                 if (target2.size() && target2[0]->getSize() == target[0]->getSize()) return false;
                 if (target2.size() && target[0]->isSmall() && !canInto(target2[0], d)) return false;
@@ -238,6 +240,7 @@ bool MAP::operat(int d) {
             }
             else {
                 if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return false;
+                if(isBarrier(mmx, mmy)) return false;
                 QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
                 if (target2.size()) return false;
                 PLAYER->move(mx, my);
