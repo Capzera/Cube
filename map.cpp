@@ -258,7 +258,7 @@ bool MAP::Victory()
 {
     QVector<BLOCK_COLOR> fin;
     QMap<BLOCK_COLOR, QVector<QPoint>>  um_vt;
-    for(int i=0, cnt=0; i<blockPos.size(); ++i){
+    for(int i=0; i<blockPos.size(); ++i){
         BLOCK_COLOR color = blockPos[i]->getColor();
         um_vt[color].push_back(blockPos[i]->getPos());
         if(blockPos[i]->getState() == GRID_STATE::FINISH){
@@ -274,16 +274,14 @@ bool MAP::Victory()
         }
     }
     for(auto& color : fin){
-        QSet<int> st;
+        int l_x = -1, l_y = -1;
         for(auto& pos : um_vt[color]){
-            int x = pos.x(), y = pos.y();
-            st.insert(x);
-            st.insert(y);
+            int t_x = pos.x(), t_y = pos.y();
+            if(l_x != -1 && (l_x != t_x || l_y != t_y))
+                return false;
+            l_x = t_x;
+            l_y = t_y;
         }
-        if(st.size() > 2){
-            return false;
-        }
-        st.clear();
     }
     return true;
 }
