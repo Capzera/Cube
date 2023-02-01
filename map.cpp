@@ -197,14 +197,24 @@ void MAP::draw_finish_block(BLOCK *bl) {
     paint.drawEllipse(x + split, y + split, radius, radius);
 }
 
+bool MAP::isBarrier(int x, int y)
+{
+    for(int i=0; i<barrier.size(); ++i){
+        if(barrier[i]->isBarrier(x, y))
+            return true;
+    }
+    return false;
+}
+
 void MAP::operat(int d) {
     int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
     int mx = x + di[d][0], my = y + di[d][1];
     int mmx = mx + di[d][0], mmy = my + di[d][1];
     if (mx < 0 || mx == ROW || my < 0 || my == COL) return;
     QVector<BLOCK*> cur = targetGrid(x, y), target = targetGrid(mx, my);
+
     if (cur.empty()) {//当前格无方块
-        if (target.empty()) {
+        if (target.empty() && !isBarrier(mx, my)) {
             PLAYER->move(mx, my);
         }
         if (target.size() == 1) {
@@ -251,9 +261,27 @@ void MAP::operat(int d) {
         }
     }
     if (Victory())
-        QMessageBox::information(this, "提示信息", "恭喜您，通关啦，请前往下一关",QMessageBox::Ok);
+    {
+
+        QMessageBox:: StandardButton result= QMessageBox::information(this, "提示信息", "恭喜您，通关啦，是否请前往下一关",QMessageBox::Yes|QMessageBox::No);
+                   switch (result)
+                   {
+                   case QMessageBox::Yes:
+                       qDebug()<<"选择Yes操作";
+                       break;
+                   case QMessageBox::No:
+                       qDebug()<<"选择NO操作";
+                       break;
+                   default:
+                       break;
+                   }
+           }
 }
 
+bool MAP::returnVictory(bool flag)
+{
+    return flag;
+}
 
 bool MAP::Victory()
 {
