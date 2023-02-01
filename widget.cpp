@@ -30,25 +30,29 @@ void Widget::keyPressEvent(QKeyEvent *event) {
         case Qt::Key_W :
            if(M->operat(1)){
                LEVEL++;
-               nextLevel();
+               le1->setText("第" + QString::number(LEVEL) + "关");
+               M->getLevel(LEVEL);
            }
             break;
         case Qt::Key_S :
         if(M->operat(2)){
             LEVEL++;
-            nextLevel();
+            le1->setText("第" + QString::number(LEVEL) + "关");
+            M->getLevel(LEVEL);
         }
             break;
         case Qt::Key_A :
         if(M->operat(3)){
             LEVEL++;
-            nextLevel();
+            le1->setText("第" + QString::number(LEVEL) + "关");
+            M->getLevel(LEVEL);
         }
             break;
         case Qt::Key_D :
         if(M->operat(4)){
             LEVEL++;
-            nextLevel();
+            le1->setText("第" + QString::number(LEVEL) + "关");
+            M->getLevel(LEVEL);
         }
             break;
     }

@@ -201,7 +201,7 @@ void MAP::draw_finish_block(BLOCK *bl) {
 bool MAP::isBarrier(int x, int y)
 {
     for(int i=0; i<barrier.size(); ++i){
-        if(barrier[i]->isBarrier(x, y))
+        if(barrier[i]->isBarrier(x, y) && barrier[i]->getState() == BARRIER_STATE::SOLID)
             return true;
     }
     return false;
@@ -263,7 +263,7 @@ bool MAP::operat(int d) {
     }
     if (Victory())
     {
-        QMessageBox:: StandardButton result= QMessageBox::information(this, "提示信息", "恭喜您，通关啦，是否请前往下一关",QMessageBox::Yes|QMessageBox::No);
+        QMessageBox:: StandardButton result= QMessageBox::information(this, "提示信息", "恭喜您，通关啦，是否前往下一关",QMessageBox::Yes|QMessageBox::No);
                    switch (result)
                    {
                    case QMessageBox::Yes:
