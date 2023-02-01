@@ -310,7 +310,7 @@ bool MAP::Victory()
             }
         }
     }
-    for(auto& color : fin){
+    for(auto& color : fin){       
         int l_x = -1, l_y = -1;
         for(auto& pos : um_vt[color]){
             int t_x = pos.x(), t_y = pos.y();
