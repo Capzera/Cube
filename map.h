@@ -1,6 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <QMessageBox>
+#include <QPushButton>
 #include <QWidget>
 #include <QPainter>
 #include <QVector>
@@ -35,6 +37,7 @@ public:
     bool checkPush(int, int, int);//是否能推动
     bool canInto (BLOCK*, int);
     bool Victory();//判断胜利
+    void nextLevel(int);
     void blockMove(int, int, int);//推箱子
     QVector<BLOCK*> targetGrid(int, int);//返回目标格指针
 public:

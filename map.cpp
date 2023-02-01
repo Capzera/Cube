@@ -1,4 +1,5 @@
 #include "map.h"
+#include "widget.h"
 
 QVector<QVector<int>> di = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 QMap<int, int> um = {{1, 2}, {2, 1}, {3, 4}, {4, 3}};
@@ -249,10 +250,10 @@ void MAP::operat(int d) {
             PLAYER->move(mx, my);
         }
     }
-    if (Victory()) {
-        qDebug()<<"Yes";
-    }
+    if (Victory())
+        QMessageBox::information(this, "提示信息", "恭喜您，通关啦，请前往下一关",QMessageBox::Ok);
 }
+
 
 bool MAP::Victory()
 {
@@ -299,3 +300,4 @@ QVector<BLOCK*> MAP::targetGrid(int x, int y) {
 bool MAP::canInto(BLOCK *bl, int d) {
     return bl->getDirection() == um[d];
 }
+

@@ -14,6 +14,7 @@ void Widget::Init() {
     le1->setReadOnly(1);
     M = new MAP(this);
     M->getLevel(LEVEL);
+    //M->goReset(Reset);
     le1->setAlignment(Qt::AlignHCenter);
     btn1->setGeometry(855, 135, 80, 40);
     le1->setGeometry(940, 137, 70, 35);
@@ -39,6 +40,14 @@ void Widget::keyPressEvent(QKeyEvent *event) {
             M->operat(4);
             break;
     }
+}
+
+void Widget::nextForMap()
+{
+    if (LEVEL == MAX_LEVEL) return;//防止最后一关点"下一关"
+    LEVEL++;
+    le1->setText("第" + QString::number(LEVEL) + "关");
+    M->getLevel(LEVEL);
 }
 
 void Widget::lastLevel() {
