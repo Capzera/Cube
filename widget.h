@@ -1,6 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include <QMessageBox>
 #include <QWidget>
 #include <QDebug>
 #include <QPainter>
@@ -30,7 +31,6 @@ public:
     QPushButton *btn1, *btn2, *btn3;//按钮类
     QLineEdit *le1;//单行文本框
      MAP *M;
-
     ~Widget();
 };
 
