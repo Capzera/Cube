@@ -26,51 +26,33 @@ void Widget::Init() {
 }
 
 void Widget::keyPressEvent(QKeyEvent *event) {
+    bool flag = false;
     switch(event->key()) {
         case Qt::Key_W :
-           if(M->operat(1)){
-               if (LEVEL == MAX_LEVEL) {//防止最后一关点"下一关"
-                   QMessageBox::information(this, "提示信息", "这是最后一关了喔");
-                   return;
-               }
-               LEVEL++;
-               le1->setText("第" + QString::number(LEVEL) + "关");
-               M->getLevel(LEVEL);
-           }
+           if(M->operat(1))
+                flag = true;
             break;
         case Qt::Key_S :
-        if(M->operat(2)){
-            if (LEVEL == MAX_LEVEL) {//防止最后一关点"下一关"
-                QMessageBox::information(this, "提示信息", "这是最后一关了喔");
-                return;
-            }
-            LEVEL++;
-            le1->setText("第" + QString::number(LEVEL) + "关");
-            M->getLevel(LEVEL);
-        }
+        if(M->operat(2))
+            flag = true;
             break;
         case Qt::Key_A :
-        if(M->operat(3)){
-            if (LEVEL == MAX_LEVEL) {//防止最后一关点"下一关"
-                QMessageBox::information(this, "提示信息", "这是最后一关了喔");
-                return;
-            }
-            LEVEL++;
-            le1->setText("第" + QString::number(LEVEL) + "关");
-            M->getLevel(LEVEL);
-        }
+        if(M->operat(3))
+            flag = true;
             break;
         case Qt::Key_D :
-        if(M->operat(4)){
-            if (LEVEL == MAX_LEVEL) {//防止最后一关点"下一关"
-                QMessageBox::information(this, "提示信息", "这是最后一关了喔");
-                return;
-            }
-            LEVEL++;
-            le1->setText("第" + QString::number(LEVEL) + "关");
-            M->getLevel(LEVEL);
-        }
+        if(M->operat(4))
+            flag = true;
             break;
+    }
+    if(flag){
+        if (LEVEL == MAX_LEVEL) {//防止最后一关点"下一关"
+            QMessageBox::information(this, "提示信息", "这是最后一关了喔");
+            return;
+        }
+        LEVEL++;
+        le1->setText("第" + QString::number(LEVEL) + "关");
+        M->getLevel(LEVEL);
     }
 }
 
