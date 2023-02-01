@@ -38,7 +38,6 @@ public:
     bool canInto (BLOCK*, int);
     bool isBarrier(int , int);//判断实心障碍
     bool Victory();//判断胜利
-    bool returnVictory(bool flag = false);
     void nextLevel(int);
     void blockMove(int, int, int);//推箱子
     QVector<BLOCK*> targetGrid(int, int);//返回目标格指针

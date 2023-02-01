@@ -255,13 +255,21 @@ bool MAP::operat(int d) {
                 PLAYER->move(mx, my);
             }
             else {
-                if (target.size()) return false;
+                if (target.size() && !(cur[0]->isSmall() && target[0]->isBig() && um[d] == target[0]->getDirection())) return false;
                 PLAYER->move(mx, my);
                 cur[0]->move(mx, my);
             }
         }
-        else {//当前格内2个方块
-            PLAYER->move(mx, my);
+        else {//当前格内2个方
+            if (cur[0]->getDirection() == d){
+                PLAYER->move(mx, my);
+            }
+            else
+            {
+                PLAYER->move(mx, my);
+                cur[0]->move(mx, my);
+                cur[1]->move(mx, my);
+            }
         }
     }
     if (Victory())
@@ -282,10 +290,6 @@ bool MAP::operat(int d) {
     return false;
 }
 
-bool MAP::returnVictory(bool flag)
-{
-    return flag;
-}
 
 bool MAP::Victory()
 {
