@@ -55,7 +55,7 @@ void MAP::blockPosInit(int level)
         if(!flag)
             blockPos.push_back(new BLOCK(bl[0], bl[1], bl[2], bl[3], bl[4], bl[5]));
         if(flag)
-            barrier.push_back(new BARRIER(bl[0], bl[1]));
+            barrier.push_back(new BARRIER(bl[0], bl[1], bl[2], bl[3]));
     }
 }
 
@@ -78,14 +78,40 @@ void MAP::paintEvent(QPaintEvent *event){
     update();
 }
 
+Qt::GlobalColor MAP::barrierColor(BARRIER* ba)
+{
+    if(ba->getColor() == BAR_BLACK)
+        return Qt::black;
+}
+
+Qt::BrushStyle MAP::barrierBrushState(BARRIER* ba)
+{
+    if(ba->getState() == SOLID)
+        return Qt::SolidPattern;
+}
+
+Qt::GlobalColor MAP::blockColor(BLOCK *bl)
+{
+     if (bl->getColor() == BLOCK_COLOR::RED)
+         return Qt::red;
+     if (bl->getColor() == BLOCK_COLOR::BLUE)
+         return Qt::blue;
+     if (bl->getColor() == BLOCK_COLOR::YELLOW)
+         return Qt::yellow;
+     if (bl->getColor() == BLOCK_COLOR::GREEN)
+         return Qt::green;
+}
+
+
+
 void MAP::draw_barrier()
 {
     QPainter paint(this);
-    paint.setPen(QPen(Qt::black, 4, Qt::SolidLine));
     for(int i=0; i<barrier.size(); ++i) {
+        paint.setPen(QPen(barrierColor(barrier[i]), 4, Qt::SolidLine));
         int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
         int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
-        paint.fillRect(QRect(x, y, B_wide, B_wide), Qt::SolidPattern);
+        paint.fillRect(QRect(x, y, B_wide, B_wide), barrierBrushState(barrier[i]));
     }
 }
 
@@ -109,18 +135,7 @@ void MAP::draw_block() {
 
 void MAP::draw_puzzle_block(BLOCK *bl) {
     QPainter paint(this);
-    if (bl->getColor() == BLOCK_COLOR::RED) {
-        paint.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap));
-    }
-    if (bl->getColor() == BLOCK_COLOR::BLUE) {
-        paint.setPen(QPen(Qt::blue, 5, Qt::SolidLine, Qt::RoundCap));
-    }
-    if (bl->getColor() == BLOCK_COLOR::YELLOW) {
-        paint.setPen(QPen(Qt::yellow, 5, Qt::SolidLine, Qt::RoundCap));
-    }
-    if (bl->getColor() == BLOCK_COLOR::GREEN) {
-        paint.setPen(QPen(Qt::green, 5, Qt::SolidLine, Qt::RoundCap));
-    }
+    paint.setPen(QPen(blockColor(bl), 5, Qt::SolidLine, Qt::RoundCap));
     bool big = bl->getSize() == BLOCK_SIZE::BIG;
     int direct;
     switch (bl->getDirection()) {
@@ -170,24 +185,7 @@ void MAP::draw_player_block(BLOCK *bl) {
 
 void MAP::draw_finish_block(BLOCK *bl) {
     QPainter paint(this);
-    switch(bl->getColor()) {
-        case BLOCK_COLOR::RED :
-            paint.setPen(QPen(Qt::red, 4, Qt::SolidLine));
-        break;
-        case BLOCK_COLOR::YELLOW :
-            paint.setPen(QPen(Qt::yellow, 4, Qt::SolidLine));
-        break;
-        case BLOCK_COLOR::BLUE :
-            paint.setPen(QPen(Qt::blue, 4, Qt::SolidLine));
-        break;
-        case BLOCK_COLOR::GREEN :
-            paint.setPen(QPen(Qt::green, 4, Qt::SolidLine));
-        break;
-        default:
-            paint.setPen(QPen(Qt::white, 5, Qt::SolidLine));
-        break;
-    }
-
+    paint.setPen(QPen(blockColor(bl), 4, Qt::SolidLine));
     int pos_x = bl->getPos().x(), pos_y = bl->getPos().y();
     int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
     int radius = B_wide * 3 / 4, split = B_wide / 8;

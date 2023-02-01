@@ -38,6 +38,10 @@ public:
     void blockMove(int, int, int);//推箱子
     QVector<BLOCK*> targetGrid(int, int);//返回目标格指针
 public:
+    Qt::GlobalColor barrierColor(BARRIER*);//返回障碍颜色
+    Qt::BrushStyle   barrierBrushState(BARRIER*);//返回障碍物填充状态
+    Qt::GlobalColor blockColor(BLOCK*);//
+public:
     int ROW = 4, COL = 3, B_wide;//定义游戏区方格长、宽、像素点矩阵宽度
     QVector<QVector<int>> locate_x, locate_y, blocks;//像素坐标记录
     int player_x, player_y;
