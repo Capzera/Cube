@@ -30,7 +30,7 @@ public:
     void draw_player_block(BLOCK*);
     void draw_finish_block(BLOCK*);
     void getLevel(int);//获取关卡数
-    void operat(int);//玩家移动
+    bool operat(int);//玩家移动
     void mapInit();//地图预设
     void blockPosInit(int);//预设方块
     bool checkIsInto(int, int, int);//是否能进入
@@ -53,6 +53,7 @@ public:
     BLOCK *PLAYER;
     QVector<BLOCK*> blockPos;
     QVector<BARRIER*> barrier;
+    int _level;
 };
 
 #endif // MAP_H

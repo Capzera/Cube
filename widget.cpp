@@ -28,26 +28,30 @@ void Widget::Init() {
 void Widget::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_W :
-            M->operat(1);
+           if(M->operat(1)){
+               LEVEL++;
+               nextLevel();
+           }
             break;
         case Qt::Key_S :
-            M->operat(2);
+        if(M->operat(2)){
+            LEVEL++;
+            nextLevel();
+        }
             break;
         case Qt::Key_A :
-            M->operat(3);
+        if(M->operat(3)){
+            LEVEL++;
+            nextLevel();
+        }
             break;
         case Qt::Key_D :
-            M->operat(4);
+        if(M->operat(4)){
+            LEVEL++;
+            nextLevel();
+        }
             break;
     }
-}
-
-void Widget::nextForMap()
-{
-    if (LEVEL == MAX_LEVEL) return;//防止最后一关点"下一关"
-    LEVEL++;
-    le1->setText("第" + QString::number(LEVEL) + "关");
-    M->getLevel(LEVEL);
 }
 
 void Widget::lastLevel() {

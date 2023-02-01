@@ -39,4 +39,5 @@ HEADERS += \
 DISTFILES += \
     level/level1.txt \
     level/level2.txt \
-    level/level1-1.txt
+    level/level1-1.txt \
+    level/level2-1.txt

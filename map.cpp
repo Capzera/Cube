@@ -9,6 +9,7 @@ MAP::MAP(QWidget *parent) : QWidget(parent) {
 }
 
 void MAP::getLevel(int level) {
+    _level = level;
     QDir *folder = new QDir;
     bool folderCheck = folder->exists("./level");
     if (!folderCheck) {
@@ -206,11 +207,11 @@ bool MAP::isBarrier(int x, int y)
     return false;
 }
 
-void MAP::operat(int d) {
+bool MAP::operat(int d) {
     int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
     int mx = x + di[d][0], my = y + di[d][1];
     int mmx = mx + di[d][0], mmy = my + di[d][1];
-    if (mx < 0 || mx == ROW || my < 0 || my == COL) return;
+    if (mx < 0 || mx == ROW || my < 0 || my == COL) return false;
     QVector<BLOCK*> cur = targetGrid(x, y), target = targetGrid(mx, my);
 
     if (cur.empty()) {//当前格无方块
@@ -222,11 +223,11 @@ void MAP::operat(int d) {
                 PLAYER->move(mx, my);
             }
             else {
-                if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return;
+                if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return false;
                 QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
-                if (target2.size() && target2[0]->getSize() == target[0]->getSize()) return;
-                if (target2.size() && target[0]->isSmall() && !canInto(target2[0], d)) return;
-                if (target2.size() && target[0]->isBig() && target[0]->getDirection() != d) return;
+                if (target2.size() && target2[0]->getSize() == target[0]->getSize()) return false;
+                if (target2.size() && target[0]->isSmall() && !canInto(target2[0], d)) return false;
+                if (target2.size() && target[0]->isBig() && target[0]->getDirection() != d) return false;
                 PLAYER->move(mx, my);
                 target[0]->move(mmx, mmy);
             }
@@ -236,9 +237,9 @@ void MAP::operat(int d) {
                 PLAYER->move(mx, my);
             }
             else {
-                if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return;
+                if (mmx < 0 || mmx == ROW || mmy < 0 || mmy == COL) return false;
                 QVector<BLOCK*> target2 = targetGrid(mmx, mmy);
-                if (target2.size()) return;
+                if (target2.size()) return false;
                 PLAYER->move(mx, my);
                 target[0]->move(mmx, mmy);
                 target[1]->move(mmx, mmy);
@@ -251,7 +252,7 @@ void MAP::operat(int d) {
                 PLAYER->move(mx, my);
             }
             else {
-                if (target.size()) return;
+                if (target.size()) return false;
                 PLAYER->move(mx, my);
                 cur[0]->move(mx, my);
             }
@@ -262,20 +263,20 @@ void MAP::operat(int d) {
     }
     if (Victory())
     {
-
         QMessageBox:: StandardButton result= QMessageBox::information(this, "提示信息", "恭喜您，通关啦，是否请前往下一关",QMessageBox::Yes|QMessageBox::No);
                    switch (result)
                    {
                    case QMessageBox::Yes:
-                       qDebug()<<"选择Yes操作";
+                       return true;
                        break;
                    case QMessageBox::No:
-                       qDebug()<<"选择NO操作";
+                       getLevel(_level);
                        break;
                    default:
                        break;
                    }
-           }
+     }
+    return false;
 }
 
 bool MAP::returnVictory(bool flag)

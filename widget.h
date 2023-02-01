@@ -24,7 +24,6 @@ public slots:
 public:
     Widget(QWidget *parent = 0);
     //void paintEvent(QPaintEvent *);//画布事件
-    void nextForMap();
     void keyPressEvent(QKeyEvent *);//键盘监听事件
     void Init();//初始化函数
     int LEVEL = 1, MAX_LEVEL = 2;//关卡数定义
