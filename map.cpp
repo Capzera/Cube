@@ -35,11 +35,11 @@ void MAP::blockPosInit(int level)
     file.open(QIODevice::ReadOnly);
     blockPos.clear();
     barrier.clear();
+    bool flag = false;
     while (!file.atEnd()){
         QByteArray buf = file.readLine();
         QString oneLine(buf), tmp;
-        QVector<int> bl;
-        bool flag = false;
+        QVector<int> bl;      
         for(auto& c : oneLine){
             char x = c.toLatin1();
             if(x == '!'){
