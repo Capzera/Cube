@@ -22,6 +22,11 @@ BARRIER_STATE BARRIER::getState()
     return _state;
 }
 
+bool BARRIER::isCrossPattern(int x, int y)
+{
+    return (_state == DIAGCROSSPATTERN && x == _pos.x() && y == _pos.y());
+}
+
 QPoint BARRIER::getPos() {
     return _pos;
 }

@@ -38,6 +38,8 @@ class BLOCK
 public:
     BLOCK();
     BLOCK(int, int, int, int, int, int);
+public:
+    void changColor(int);
     BLOCK_COLOR getColor();
     GRID_STATE getState();
     BLOCK_DIRECTION getDirection();

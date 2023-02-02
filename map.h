@@ -22,6 +22,7 @@ public slots:
 
 public:
     explicit MAP(QWidget *parent = nullptr);
+    void isChangeColor(QVector<BLOCK*>);
     void paintEvent(QPaintEvent*);
     void draw_frame();//画边框
     void draw_block();//画方块

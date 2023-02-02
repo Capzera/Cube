@@ -34,6 +34,11 @@
     _pos = QPoint(x, y);
 }
 
+ void BLOCK::changColor(int color)
+ {
+     _color = (enum BLOCK_COLOR) color;
+ }
+
 void BLOCK::move(int& x, int& y) {
     _pos.setX(x);
     _pos.setY(y);

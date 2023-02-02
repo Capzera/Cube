@@ -82,28 +82,55 @@ void MAP::paintEvent(QPaintEvent *event){
 
 Qt::GlobalColor MAP::barrierColor(BARRIER* ba)
 {
-    if(ba->getColor() == BAR_BLACK)
+    switch (ba->getColor()) {
+    case 0:
         return Qt::black;
+    case 1:
+        return Qt::red;
+    case 2:
+        return Qt::yellow;
+    case 3:
+        return Qt::blue;
+    case 4:
+        return Qt::green;
+    default:
+        break;
+    }
+
 }
 
 Qt::BrushStyle MAP::barrierBrushState(BARRIER* ba)
 {
-    if(ba->getState() == SOLID)
+    switch (ba->getState()) {
+    case 0:
         return Qt::SolidPattern;
+    case 1:
+        return Qt::DiagCrossPattern;
+    default:
+        break;
+    }
 }
 
 Qt::GlobalColor MAP::blockColor(BLOCK *bl)
 {
-     if (bl->getColor() == BLOCK_COLOR::RED)
-         return Qt::red;
-     if (bl->getColor() == BLOCK_COLOR::BLUE)
-         return Qt::blue;
-     if (bl->getColor() == BLOCK_COLOR::YELLOW)
-         return Qt::yellow;
-     if (bl->getColor() == BLOCK_COLOR::GREEN)
-         return Qt::green;
-}
+    switch (bl->getColor()) {
+    case 0:
+        return Qt::black;
+    case 1:
+        return Qt::red;
+    case 2:
+        return Qt::yellow;
+    case 3:
+        return Qt::blue;
+    case 4:
+        return Qt::green;
+    case 5:
+        return Qt::white;
+    default:
+        break;
+    }
 
+}
 
 
 void MAP::draw_barrier()
@@ -113,6 +140,7 @@ void MAP::draw_barrier()
         paint.setPen(QPen(barrierColor(barrier[i]), 4, Qt::SolidLine));
         int pos_x = barrier[i]->getPos().x(), pos_y = barrier[i]->getPos().y();
         int x = locate_x[pos_x][pos_y], y = locate_y[pos_x][pos_y];
+        paint.drawRect(QRect(x, y, B_wide, B_wide));
         paint.fillRect(QRect(x, y, B_wide, B_wide), barrierBrushState(barrier[i]));
     }
 }
@@ -207,6 +235,19 @@ bool MAP::isBarrier(int x, int y)
     return false;
 }
 
+void MAP::isChangeColor(QVector<BLOCK *> block)//目标个改变颜色
+{
+    int x = block[0]->getPos().x(), y = block[0]->getPos().y();
+    for(int i=0; i<barrier.size(); ++i){
+        if(barrier[i]->isCrossPattern(x, y)){
+               int color = barrier[i]->getColor();
+               for(int j=0; j<block.size(); ++j)
+                   block[j]->changColor(color);
+               break;
+        }
+    }
+}
+
 bool MAP::operat(int d) {
     int x = PLAYER->getPos().x(), y = PLAYER->getPos().y();
     int mx = x + di[d][0], my = y + di[d][1];
@@ -232,6 +273,7 @@ bool MAP::operat(int d) {
                 if (target2.size() && target[0]->isBig() && target[0]->getDirection() != d) return false;
                 PLAYER->move(mx, my);
                 target[0]->move(mmx, mmy);
+                isChangeColor(target);
             }
         }
         if (target.size() == 2) {
@@ -246,18 +288,20 @@ bool MAP::operat(int d) {
                 PLAYER->move(mx, my);
                 target[0]->move(mmx, mmy);
                 target[1]->move(mmx, mmy);
+                isChangeColor(target);
             }
         }
     }
     else {
         if (cur.size() == 1) {//当前格内1个方块b
-            if (cur[0]->getDirection() == d) {//从当前方块开口出来
+             if (cur[0]->getDirection() == d) {//从当前方块开口出来
                 PLAYER->move(mx, my);
             }
             else {
                 if (target.size() && !(cur[0]->isSmall() && target[0]->isBig() && um[d] == target[0]->getDirection())) return false;
                 PLAYER->move(mx, my);
                 cur[0]->move(mx, my);
+                isChangeColor(cur);
             }
         }
         else {//当前格内2个方
@@ -269,6 +313,7 @@ bool MAP::operat(int d) {
                 PLAYER->move(mx, my);
                 cur[0]->move(mx, my);
                 cur[1]->move(mx, my);
+                isChangeColor(cur);
             }
         }
     }
@@ -279,7 +324,6 @@ bool MAP::operat(int d) {
                    {
                    case QMessageBox::Yes:
                        return true;
-                       break;
                    case QMessageBox::No:
                        getLevel(_level);
                        break;
@@ -302,6 +346,7 @@ bool MAP::Victory()
             fin.push_back(blockPos[i]->getColor());
             QVector<BLOCK*> tmp;
             tmp = targetGrid(blockPos[i]->getPos().x(), blockPos[i]->getPos().y());
+            if(!tmp.size()) return false;
             for(int j=0; j<tmp.size(); ++j){
                 if(tmp[j]->getColor() != blockPos[i]->getColor()){
                     return false;
@@ -310,7 +355,8 @@ bool MAP::Victory()
             }
         }
     }
-    for(auto& color : fin){       
+
+    for(auto& color : fin){
         int l_x = -1, l_y = -1;
         for(auto& pos : um_vt[color]){
             int t_x = pos.x(), t_y = pos.y();
