@@ -25,6 +25,10 @@
      return _size;
  }
 
+ //2-方块 3-终点
+ //黑0 红1 黄2 蓝3 绿4 白5
+ //上1 下2 左3 右4
+ //小0 大1 其他2
  BLOCK::BLOCK(int x, int y, int state, int color, int direction, int size)//
 {
     _state = (enum GRID_STATE) state;

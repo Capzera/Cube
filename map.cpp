@@ -383,3 +383,7 @@ bool MAP::canInto(BLOCK *bl, int d) {
     return bl->getDirection() == um[d];
 }
 
+MAP::~MAP()
+{
+    delete PLAYER;
+}

@@ -2,6 +2,8 @@
 
 BARRIER::BARRIER() {}
 
+//黑0 红1 黄2 蓝3 绿4
+//实心0 网格1
 BARRIER::BARRIER(int x, int y, int color, int state) : _pos(QPoint(x, y))
 {
     _color = (BARRIER_COLOR) color;

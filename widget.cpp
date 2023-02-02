@@ -80,4 +80,6 @@ void Widget::Reset() {
     M->getLevel(LEVEL);
 }
 
-Widget::~Widget() {}
+Widget::~Widget() {
+    delete M;
+}
